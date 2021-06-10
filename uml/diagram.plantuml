@@ -1,7 +1,6 @@
 @startuml Class Diagram
 
 abstract class Table{
-    #columns_
 }
 class Controller{
     -model_
@@ -14,6 +13,11 @@ abstract class Model{
 class ModelDB{
     -db_
 }
+class KeyWords{
+    -key_words_list_
+    -id_
+}
+
 class View{
     -container_
     #set_up()
@@ -24,8 +28,13 @@ class Video {
     #title_
     #state
     #publication_date_
-    #used_words_
     #notes_
+}
+
+class VideoFullInfo {
+    #key_words_
+    #video_
+
 }
 class Statistics{
     -table_
@@ -38,6 +47,14 @@ Controller *-- Model
 Controller *-- View
 
 Table --> Video
+
+Table --> KeyWords
+
+Table --> VideoFullInfo
+
+VideoFullInfo o-- Video
+
+VideoFullInfo o-- KeyWords
 
 Model --> ModelDB
 
