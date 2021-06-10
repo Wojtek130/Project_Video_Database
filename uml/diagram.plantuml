@@ -1,0 +1,41 @@
+@startuml Class Diagram
+
+
+
+abstract class Table
+class Controller{
+    -model_
+    -view_
+}
+abstract class Model
+class ModelDB{
+    -db_
+}
+class View{
+    -container_
+}
+class Video {
+    -id_
+    -episode_number_
+    -title_
+    -state
+    -publication_date_
+    -used_words_
+    -notes_
+}
+class Statistics{
+    -table_
+}
+class Test
+
+Controller *-- Model
+
+Controller *-- View
+
+Table --> Video
+
+Model --> ModelDB
+
+Statistics *-- Table
+
+@enduml
