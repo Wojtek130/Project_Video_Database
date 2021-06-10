@@ -1,6 +1,7 @@
 @startuml Class Diagram
 
-abstract class Table{
+abstract class Row{
+    -stats()
 }
 class Controller{
     -model_
@@ -8,14 +9,14 @@ class Controller{
 }
 abstract class Model{
     #save()
-    #get_table()
+    #get_Row()
 }
 class ModelDB{
     -db_
 }
 class KeyWords{
-    -key_words_list_
-    -id_
+    -video_id_
+    -key_word_id_
 }
 
 class View{
@@ -23,41 +24,27 @@ class View{
     #set_up()
 }
 class Video {
-    #id_
+    #video_id_
     #episode_number_
+    #key_word_ids_
     #title_
     #state
     #publication_date_
     #notes_
 }
 
-class VideoFullInfo {
-    #key_words_
-    #video_
 
-}
-class Statistics{
-    -table_
-    +show_graph()
-}
 class Test
 
 Controller *-- Model
 
 Controller *-- View
 
-Table --> Video
+Row --> Video
 
-Table --> KeyWords
-
-Table --> VideoFullInfo
-
-VideoFullInfo o-- Video
-
-VideoFullInfo o-- KeyWords
+Video o-- KeyWords
 
 Model --> ModelDB
 
-Statistics *-- Table
 
 @enduml

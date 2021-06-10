@@ -6,7 +6,7 @@ This is an app storing information about YouTube videos. The app is designed usi
 
 ## Class Diagram
 
-![](https://i.imgur.com/U6YyX9N.png)
+![](https://i.imgur.com/dQAHZw9.png)
 
 ## Project details
 
