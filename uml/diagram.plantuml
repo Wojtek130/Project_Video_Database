@@ -1,30 +1,35 @@
 @startuml Class Diagram
 
-
-
-abstract class Table
+abstract class Table{
+    #columns_
+}
 class Controller{
     -model_
     -view_
 }
-abstract class Model
+abstract class Model{
+    #save()
+    #get_table()
+}
 class ModelDB{
     -db_
 }
 class View{
     -container_
+    #set_up()
 }
 class Video {
-    -id_
-    -episode_number_
-    -title_
-    -state
-    -publication_date_
-    -used_words_
-    -notes_
+    #id_
+    #episode_number_
+    #title_
+    #state
+    #publication_date_
+    #used_words_
+    #notes_
 }
 class Statistics{
     -table_
+    +show_graph()
 }
 class Test
 
