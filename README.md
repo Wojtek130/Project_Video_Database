@@ -10,7 +10,7 @@ This is an app storing information about YouTube videos. The app is designed usi
 
 ## Project details
 
-The whole project is written in Python. The app is connecten to a SQLite database.
+The whole project is written in Python. The app is connected to a SQLite database.
 Used libraries: tkinter.   
 
 
