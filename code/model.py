@@ -1,1 +1,3 @@
-print(2*2)
+class Model:
+    def load_table(self):
+        print("getting table from DB")

@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import *
+from pubsub import pub
 
 class View:
 
@@ -7,18 +8,19 @@ class View:
         self.main_window_ = main_window
         return
 
-    def setup(self):
+    def set_up(self):
         self.create_widgets()
-        self.setup_layout()
+        self.set_up_layout()
 
     def load_table(self):
         print("loading table")
+        pub.sendMessage("load_table")
 
-    def setup_layout(self):
+    def set_up_layout(self):
         self.top_frame_.pack(side = TOP)
         self.bottom_frame_.pack (side=BOTTOM)
         self.top_frame_2_.pack(side = TOP)
-        #self.b1LoadImg.pack( side=LEFT)
+        self.but_1_show_table_.pack( side=LEFT)
         #self.b2LineDetect.pack(side = RIGHT)
         #self.scale4.pack(side=BOTTOM) #max line gap
         #self.scale3.pack(side=BOTTOM) #min line lenght
@@ -46,5 +48,5 @@ if __name__=="__main__":
     #main_window.resizable(0, 0)
     main_window.title("Video Database")
     view=View(main_window)
-    view.setup()
+    view.set_up()
     main_window.mainloop()
