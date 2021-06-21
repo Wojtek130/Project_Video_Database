@@ -15,8 +15,8 @@ class ModelDB{
     -db_
 }
 class KeyWords{
-    -video_id_
     -key_word_id_
+    -name_
 }
 
 class View{
