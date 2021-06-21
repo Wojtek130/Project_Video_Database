@@ -25,13 +25,18 @@ class KeyWord:
         self.key_word_id_inc()
         self.name_ = name
 
-    @staticmethod #maybe it should be a class method (pro)
+    @classmethod #maybe it should be a class method (pro)
     def key_word_id_inc(self):
         self.current_key_word_id_ += 1
         return
 
 if __name__ == "__main__":
     v1 = Video()
-    print(v1.video_id_)
+    #print(v1.video_id_)
     v2 = Video()
-    print(v2.video_id_)
+   # print(v2.video_id_)
+
+    kw1 = KeyWord("bread")
+    print(kw1.keyword_id_)
+    kw2 = KeyWord("butter")
+    print(kw2.keyword_id_)
