@@ -13,6 +13,9 @@ class Video(Row):
         #create/get from database all keyword obcjects and add their key_word_ids to self.key_word_ids_list
         #self.key_word_ids_list = []
 
+    def data_tuple(self):
+        return (self.video_id_, self.episode_number_, self.title_, self.state_, self.publication_date_, self.notes_,)
+
     @classmethod #maybe it should be a static method (pro)
     def video_id_inc(self):
         self.current_video_id_ += 1

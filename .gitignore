@@ -4,3 +4,4 @@ venv/
 code/__pycache__/
 tests/__pycache__/
 *.db
+db_script.py
