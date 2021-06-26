@@ -1,8 +1,10 @@
-import unittest
-import sqlite3
-#from DateTime import date
 import datetime
+import sqlite3
+import unittest
+
+
 from video import Video
+from key_word import KeyWord
 
 
 class TestDB(unittest.TestCase):
@@ -22,13 +24,13 @@ class TestDB(unittest.TestCase):
         
         cmd = """CREATE TABLE IF NOT EXISTS Video 
             (video_id integer PRIMARY KEY NOT NULL, episode_number integer, title TEXT, state TEXT, publication_date DATE, notes TEXT)"""
-        sqlite_insert_with_param = """INSERT INTO 'Video'
-                          ('video_id', 'episode_number', 'title', 'state', 'publication_date', 'notes') 
-                          VALUES (?, ?, ?, ?, ?, ?);"""
+        #sqlite_insert_with_param = """INSERT INTO 'Video'
+                          #('video_id', 'episode_number', 'title', 'state', 'publication_date', 'notes') 
+                          #VALUES (?, ?, ?, ?, ?, ?);"""
         sqlite_upsert_with_param = """INSERT INTO 'Video'
                           ('video_id', 'episode_number', 'title', 'state', 'publication_date', 'notes')               
                             VALUES (?, ?, ?, ?, ?, ?)
-                            ON CONFLICT(video_id) DO NOTHING;"""
+                           ON CONFLICT(video_id) DO NOTHING;"""
         #INSERT INTO vocabulary(word) VALUES('jovial')
         #ON CONFLICT(word) DO UPDATE SET count=count+1;
         self.vid_1 = Video(2, "test video", "working on",  datetime.date(2014,4,28), "goes on")
@@ -36,6 +38,17 @@ class TestDB(unittest.TestCase):
         self.c.execute(cmd)
         self.c.execute(sqlite_upsert_with_param, data_tuple)
         self.conn.commit()
+
+        self.kw_1 = KeyWord("sea")
+        self.kw_2 = KeyWord("ocean")
+
+        create_keyword_table = """CREATE TABLE IF NOT EXISTS KeyWord 
+            (keyword_id integer PRIMARY KEY NOT NULL, name TEXT"""
+
+        upsert_keyword = """INSERT INTO 'KeyWord'
+                    ('keyword_id', 'name')               
+                    VALUES (?, ?)
+                    ON CONFLICT(keyword_id) DO NOTHING;"""
         
 
 
