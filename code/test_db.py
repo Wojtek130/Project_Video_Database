@@ -21,10 +21,16 @@ class TestDB(unittest.TestCase):
     def setUpClass(cls):
         cls.conn = sqlite3.connect("database/test.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
         cls.c = cls.conn.cursor()
-        cls.vid_1 = Video(2, "test video", "working on",  datetime.date(2014,4,28), "goes onaa")        
+
         cls.c.execute(Video.create_table_)
+        cls.vid_1 = Video(2, "test video", "working on",  datetime.date(2014,4,28), "goes onaa")        
         cls.c.execute(Video.insert_replace_, cls.vid_1.data_tuple())
         cls.conn.commit()
+
+        cls.vid_2 = Video(3, "Spain", "ready",  datetime.date(2018,5,29), "waiting for")        
+        cls.c.execute(Video.insert_replace_, cls.vid_2.data_tuple())
+        cls.conn.commit()
+
         cls.kw_1 = KeyWord("sea")
         cls.kw_2 = KeyWord("ocean")
         cls.kw_3 = KeyWord("fish")
@@ -38,16 +44,22 @@ class TestDB(unittest.TestCase):
         cls.conn.commit()
 
         cls.vkw_1 = VidKeyWord(1, 2)
-        print(cls.vkw_1)
         cls.c.execute(VidKeyWord.insert_replace_, cls.vkw_1.data_tuple())
         cls.conn.commit()
 
         cls.vkw_2 = VidKeyWord(1, 3)
-        print(cls.vkw_2)
         cls.c.execute(VidKeyWord.insert_replace_, cls.vkw_2.data_tuple())
-        cls.conn.commit()       
+        cls.conn.commit()
 
-        sqlite_select_query = """SELECT * from Video where video_id == 1"""
+        cls.vkw_3 = VidKeyWord(2, 1)
+        cls.c.execute(VidKeyWord.insert_replace_, cls.vkw_3.data_tuple())
+        cls.conn.commit()
+       
+        cls.vkw_4 = VidKeyWord(2, 2)
+        cls.c.execute(VidKeyWord.insert_replace_, cls.vkw_4.data_tuple())
+        cls.conn.commit()
+
+        sqlite_select_query = """SELECT * from Video where video_id = 1"""
         cls.c.execute(sqlite_select_query)
         cls.record = cls.c.fetchone()
 
@@ -65,7 +77,7 @@ class TestDB(unittest.TestCase):
 
         query_all_keywords_vid_1 = """SELECT kw.name
                                     FROM Video v, VidKeyWord vkw, KeyWord kw
-                                    WHERE v.video_id = vkw.video_id AND kw.keyword_id = vkw.keyword_id"""
+                                    WHERE v.video_id = vkw.video_id AND kw.keyword_id = vkw.keyword_id AND v.video_id = 1"""
 
         cls.c.execute(query_all_keywords_vid_1)
         cls.keywords_vid_1 = cls.c.fetchall()
@@ -127,6 +139,7 @@ class TestDB(unittest.TestCase):
         self.assertEqual(self.record_vkw_1[2], self.vkw_1.keyword_id_)
 
     def test_vid1_keywords(self):
+        print("!!!!!!!!!!!!!!!!!!!!!!1: ", set(map(lambda tuple : tuple[0],self.keywords_vid_1)))
         print('test_keywords_vid_1')
         self.assertEqual(set(map(lambda tuple : tuple[0],self.keywords_vid_1)), set(["ocean","fish"]))
 

@@ -35,7 +35,7 @@ class View:
         self.tv_.column('State', anchor=CENTER, width=80)
         self.tv_.column('Publication date', anchor=CENTER, width=100)
         self.tv_.column('Notes', anchor=CENTER, width=80)
-        self.tv_.column('Key words', anchor=CENTER, width=80)
+        self.tv_.column('Key words', anchor=CENTER, width=250)
 
         self.tv_.heading('#0', text='', anchor=CENTER)
         self.tv_.heading('Video ID', text='Video ID', anchor=CENTER)
@@ -45,6 +45,7 @@ class View:
         self.tv_.heading('Publication date', text='Publication date', anchor=CENTER)
         self.tv_.heading('Notes', text='Notes', anchor=CENTER)
         self.tv_.heading('Key words', text='Key words', anchor=CENTER)
+        self.insert_data_in_tv()
         self.tv_.pack()
         pub.sendMessage("but_1_show_videos_clicked")
 
@@ -73,6 +74,9 @@ class View:
 
     def but_4_sorting_clicked(self, *args):
         print("sorting changed")
+
+    def insert_data_in_tv(self, sorting = ""):
+        return 
 
 
     def set_up_layout(self):
