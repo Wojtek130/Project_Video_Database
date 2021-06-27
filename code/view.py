@@ -23,10 +23,8 @@ class View:
             self.keyword_tv_.pack_forget()
         except AttributeError:
             pass
-        print("loading table")
         self.but_1_show_videos_['state'] = tk.DISABLED
         self.but_2_show_keywords_['state'] = tk.NORMAL
-
         value_inside = tk.StringVar(self.top_frame_2_)
         value_inside.set("Sort by")
         options_list = ["Video ID", "Episode No.", "Title", "State","Publication date"]
@@ -93,25 +91,18 @@ class View:
         self.but_7_cancel_ = ttk.Button(self.add_video_pop_up_, text="Cancel", command=self.but_7_cancel_clicked)
         self.but_6_submit_.grid(row=6, column=0)
         self.but_7_cancel_.grid(row=6, column=1)
-        #self.but_6_submit_.pack(side=BOTTOM)
-        #self.but_7_cancel_.pack(side=BOTTOM)
-        print("add video")
 
     def but_4_sorting_clicked(self, sorting_option):
-        print(sorting_option)
         for item in self.video_tv_.get_children():
             self.video_tv_.delete(item)
         pub.sendMessage("but_1_show_videos_clicked", data=sorting_option)
-        print("sorting changed")
 
     def but_5_sorting_clicked(self, sorting_option):
         for item in self.keyword_tv_.get_children():
             self.keyword_tv_.delete(item)
         pub.sendMessage("but_2_show_keywords_clicked", data=sorting_option)
-        print("sorting changed")
 
     def but_6_submit_clicked(self):
-        print("submit clicked")
         episode_no = self.e_episode_no_.get()
         title = self.e_title_.get()
         state = self.e_state_.get()
@@ -120,13 +111,10 @@ class View:
         notes = self.e_notes_.get()
         key_words = self.e_key_words_.get()
         key_words_list = key_words.split(", ")
-        print(episode_no, title, state, publication_date, notes, key_words)
-        print(key_words_list)
         pub.sendMessage("but_6_submit_clicked", data = (Video(episode_no,title, state, pub_date, notes), key_words_list))
         self.add_video_pop_up_.destroy()
 
     def but_7_cancel_clicked(self):
-        print("cancel clicked")
         self.add_video_pop_up_.destroy()
 #18/09/19
 #date_time_obj = datetime.strptime(date_time_str, '%d/%m/%y)
@@ -166,7 +154,6 @@ class View:
         self.keyword_tv_.pack()
 
     def insert_videos_data(self, videos_information_array):
-        print("/////////", videos_information_array)
         for i, a in enumerate(videos_information_array):
             self.video_tv_.insert(parent='', index = i, values=a)
 

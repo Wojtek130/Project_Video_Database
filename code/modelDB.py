@@ -23,7 +23,7 @@ class ModelDB(Model):
         self.all_keywords_for_vid_ = """SELECT kw.name
                                     FROM Video v, VidKeyWord vkw, KeyWord kw
                                     WHERE v.video_id = vkw.video_id AND kw.keyword_id = vkw.keyword_id AND v.video_id = ?"""
-        self.all_keywords_for_vid_ = """SELECT v.title
+        self.all_titles_for_kwid_ = """SELECT v.title
                             FROM Video v, VidKeyWord vkw, KeyWord kw
                             WHERE v.video_id = vkw.video_id AND kw.keyword_id = vkw.keyword_id AND kw.keyword_id = ?"""
         self.keywords_all_information_ = """SELECT * from KeyWord"""
@@ -37,13 +37,20 @@ class ModelDB(Model):
         self.c_.execute(self.all_keywords_for_vid_, (video_id,))
         return self.c_.fetchall()
 
+    def get_all_titles_for_a_kwid(self, keyword_id):
+        self.c_.execute(self.all_titles_for_kwid_, (keyword_id,))
+        return self.c_.fetchall()
+
     def videos_data_array(self, sorting_option):
         self.get_videos_information_from_db()
         videos_with_keywords = []
         for v in self.record_videos_:
             v_list = list(v)
             vid = v_list[0]
+            #self.c_.execute(self.keywords_all_information_)
+            #self.record_keywords_ = self.c_.fetchall()
             keywords = self.get_all_keywords_for_a_vid(vid)
+            print(keywords)
             keywords = list(map(lambda tuple : tuple[0], keywords))
             v_list.append(keywords)
             videos_with_keywords.append(v_list)
@@ -71,7 +78,7 @@ class ModelDB(Model):
         for kw in self.record_keywords_:
             kw_list = list(kw)
             kwid = kw[0]
-            titles = self.get_all_keywords_for_a_vid(kwid)
+            titles = self.get_all_titles_for_a_kwid(kwid)
             titles = list(map(lambda tuple : tuple[0], titles))
             kw_list.append(titles)
             keywords_with_titles.append(kw_list)
