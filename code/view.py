@@ -67,12 +67,12 @@ class View:
         tk.Label(self.add_video_pop_up_, text="Notes").grid(row=4)
         tk.Label(self.add_video_pop_up_, text="Key Words").grid(row=5)
 
-        self.e_episode_no_ = tk.StringVar()
-        self.e_title_ = tk.StringVar()
-        self.e_state_ = tk.StringVar()
-        self.e_publication_date_ = tk.StringVar()
-        self.e_notes_ = tk.StringVar()
-        self.e_key_words_ = tk.StringVar()
+        self.e_episode_no_ = tk.StringVar(value="{}".format(Video.current_video_id_))
+        self.e_title_ = tk.StringVar(value="")
+        self.e_state_ = tk.StringVar(value="")
+        self.e_publication_date_ = tk.StringVar(value="01.01.2000")
+        self.e_notes_ = tk.StringVar(value="")
+        self.e_key_words_ = tk.StringVar("")
 
         e_episode_no = tk.Entry(self.add_video_pop_up_, textvariable=self.e_episode_no_)
         e_title = tk.Entry(self.add_video_pop_up_, textvariable=self.e_title_)

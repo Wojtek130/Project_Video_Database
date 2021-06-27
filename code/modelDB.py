@@ -47,10 +47,7 @@ class ModelDB(Model):
         for v in self.record_videos_:
             v_list = list(v)
             vid = v_list[0]
-            #self.c_.execute(self.keywords_all_information_)
-            #self.record_keywords_ = self.c_.fetchall()
             keywords = self.get_all_keywords_for_a_vid(vid)
-            print(keywords)
             keywords = list(map(lambda tuple : tuple[0], keywords))
             v_list.append(keywords)
             videos_with_keywords.append(v_list)
