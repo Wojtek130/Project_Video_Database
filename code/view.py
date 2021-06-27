@@ -45,9 +45,8 @@ class View:
         self.tv_.heading('Publication date', text='Publication date', anchor=CENTER)
         self.tv_.heading('Notes', text='Notes', anchor=CENTER)
         self.tv_.heading('Key words', text='Key words', anchor=CENTER)
-        self.insert_data_in_tv()
         self.tv_.pack()
-        pub.sendMessage("but_1_show_videos_clicked")
+        pub.sendMessage("but_1_show_videos_pressed")
 
     
     def but_2_show_keywords_clicked(self):
@@ -75,8 +74,10 @@ class View:
     def but_4_sorting_clicked(self, *args):
         print("sorting changed")
 
-    def insert_data_in_tv(self, sorting = ""):
-        return 
+    def insert_videos_data(self, videos_information_array):
+        for i, a in enumerate(videos_information_array):
+            self.tv_.insert(parent='', index = i, values=a)
+
 
 
     def set_up_layout(self):

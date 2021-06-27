@@ -1,6 +1,6 @@
 import datetime
 import sqlite3
-
+from pubsub import pub
 from model import Model
 
 class ModelDB(Model):
@@ -12,7 +12,7 @@ class ModelDB(Model):
                                     FROM Video v, VidKeyWord vkw, KeyWord kw
                                     WHERE v.video_id = vkw.video_id AND kw.keyword_id = vkw.keyword_id AND v.video_id = ?"""
 
-    def get_videos_information(self):
+    def get_videos_information_from_db(self):
         #get all objects from DB/desirialize objects
         self.c_.execute(self.videos_all_information_)
         self.record_videos_ = self.c_.fetchall()
@@ -23,17 +23,20 @@ class ModelDB(Model):
         return self.c_.fetchall()
         #print(self.all_keywords_for_vid)
 
-    def get_videos_with_keywords(self):
-        self.get_videos_information()
+    def videos_data_array(self):
+        self.get_videos_information_from_db()
         videos_with_keywords = []
         for v in self.record_videos_:
             v_list = list(v)
             vid = v[0]
             keywords = self.get_all_keywords_for_a_vid(vid)
             keywords = list(map(lambda tuple : tuple[0], keywords))
-            v_list.extend(keywords)
+            v_list.append(keywords)
             videos_with_keywords.append(v_list)
         return videos_with_keywords
+
+    def get_videos_information(self):
+        pub.sendMessage("videos_information_ready", data = self.videos_data_array())
     
     def __del__(self):
         self.conn_.close()
@@ -42,4 +45,4 @@ if __name__ == "__main__":
     m = ModelDB()
    # m.get_videos_information()
    # m.get_all_keywords_for_a_vid(1)
-    print(m.get_videos_with_keywords())
+    print(m.videos_data_array())

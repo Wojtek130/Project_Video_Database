@@ -139,7 +139,6 @@ class TestDB(unittest.TestCase):
         self.assertEqual(self.record_vkw_1[2], self.vkw_1.keyword_id_)
 
     def test_vid1_keywords(self):
-        print("!!!!!!!!!!!!!!!!!!!!!!1: ", set(map(lambda tuple : tuple[0],self.keywords_vid_1)))
         print('test_keywords_vid_1')
         self.assertEqual(set(map(lambda tuple : tuple[0],self.keywords_vid_1)), set(["ocean","fish"]))
 
