@@ -8,5 +8,13 @@ class Row(ABC):
         return
 
     @property
-    def create_table(self):
+    def create_table_(self):
+        raise NotImplementedError
+
+    @property
+    def insert_replace_(self):
+        raise NotImplementedError
+    
+    @property
+    def upsert_(self):
         raise NotImplementedError

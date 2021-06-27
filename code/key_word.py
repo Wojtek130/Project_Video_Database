@@ -3,8 +3,15 @@ from row import Row
 class KeyWord(Row):
 
     current_key_word_id_ = 1
-    create_table =  """CREATE TABLE IF NOT EXISTS KeyWord 
-                (keyword_id integer PRIMARY KEY NOT NULL, name TEXT)"""
+    create_table_ =  """CREATE TABLE IF NOT EXISTS KeyWord 
+                    (keyword_id integer PRIMARY KEY NOT NULL, name TEXT)"""
+    insert_replace_ = """INSERT OR REPLACE INTO 'KeyWord'
+                    ('keyword_id', 'name')               
+                    VALUES (?, ?)"""
+    upsert_ = """INSERT INTO 'KeyWord'
+            ('keyword_id', 'name')               
+            VALUES (?, ?)
+            ON CONFLICT(keyword_id) DO NOTHING;"""
     already_created_keywords = []
     def __init__(self, name):
         self.keyword_id_ = self.current_key_word_id_
