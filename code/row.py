@@ -6,3 +6,7 @@ class Row(ABC):
     @abstractmethod
     def data_tuple(self):
         return
+
+    @property
+    def create_table(self):
+        raise NotImplementedError

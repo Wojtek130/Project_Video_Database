@@ -1,7 +1,10 @@
 from row import Row
 
 class KeyWord(Row):
+
     current_key_word_id_ = 1
+    create_table =  """CREATE TABLE IF NOT EXISTS KeyWord 
+                (keyword_id integer PRIMARY KEY NOT NULL, name TEXT)"""
     already_created_keywords = []
     def __init__(self, name):
         self.keyword_id_ = self.current_key_word_id_
@@ -9,8 +12,12 @@ class KeyWord(Row):
         self.name_ = name
         self.already_created_keywords.append(self.name_)
 
+    def __str__(self):
+        return "KeyWord({0}, {1})".format(self.keyword_id_, self.name_)
+
     def data_tuple(self):
         return (self.keyword_id_, self.name_)
+
 
     @classmethod #maybe it should be a class method (pro)
     def key_word_id_inc(self):

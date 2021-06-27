@@ -2,6 +2,8 @@ from row import Row
 
 class Video(Row):
     current_video_id_ = 1
+    create_table =  """CREATE TABLE IF NOT EXISTS KeyWord 
+            (keyword_id integer PRIMARY KEY NOT NULL, name TEXT)"""
     def __init__(self, episode_number = 0, title = "", state = "recorded", publication_date = "today", notes  = ""):
         self.video_id_ = self.current_video_id_
         self.video_id_inc()
