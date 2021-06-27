@@ -3,21 +3,19 @@ import os
 import sqlite3
 import unittest
 
-
 from video import Video
 from key_word import KeyWord
 from vid_key_word import VidKeyWord
 
-
 class TestDB(unittest.TestCase):
 
-   
     def setUp(self):
        pass
 
     @classmethod
     def tearDownClass(cls):
-       os.remove("database/test.db")
+        cls.conn.close()
+        os.remove("database/test.db")
 
     @classmethod
     def setUpClass(cls):
@@ -36,7 +34,6 @@ class TestDB(unittest.TestCase):
         cls.c.execute(KeyWord.insert_replace_, cls.kw_3.data_tuple())
         cls.conn.commit()
 
-        ###   
         cls.c.execute(VidKeyWord.create_table_)
         cls.conn.commit()
 
@@ -49,7 +46,6 @@ class TestDB(unittest.TestCase):
         print(cls.vkw_2)
         cls.c.execute(VidKeyWord.insert_replace_, cls.vkw_2.data_tuple())
         cls.conn.commit()       
-        ###
 
         sqlite_select_query = """SELECT * from Video where video_id == 1"""
         cls.c.execute(sqlite_select_query)
@@ -75,7 +71,7 @@ class TestDB(unittest.TestCase):
         cls.keywords_vid_1 = cls.c.fetchall()
 
     def tearDown(self):
-         self.conn.close()
+         pass
 
     def test_vid(self):
         print('test_vid')
