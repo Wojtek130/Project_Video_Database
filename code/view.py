@@ -14,6 +14,11 @@ class View:
         self.set_up_layout()
 
     def but_1_show_videos_clicked(self):
+        try:
+            self.but_5_sorting_alph_.pack_forget()
+            self.keyword_tv_.pack_forget()
+        except AttributeError:
+            pass
         print("loading table")
         self.but_1_show_videos_['state'] = tk.DISABLED
         self.but_2_show_keywords_['state'] = tk.NORMAL
@@ -26,41 +31,27 @@ class View:
         options_list = ["Video ID", "Episode No.", "Title", "State","Publication date"]
         self.but_4_sorting_ = tk.OptionMenu(self.top_frame_2_, value_inside, *options_list, command=self.but_4_sorting_clicked)
         self.but_4_sorting_.pack(side=LEFT)
-        self.tv_ = ttk.Treeview(self.bottom_frame_)
-        self.tv_['columns']=('Video ID', 'Episode No.', 'Title', 'State', 'Publication date', 'Notes', 'Key words')
-        self.tv_.column('#0', width=0, stretch=NO)
-        self.tv_.column('Video ID', anchor=CENTER, width=80)
-        self.tv_.column('Episode No.', anchor=CENTER, width=80)
-        self.tv_.column('Title', anchor=CENTER, width=80)
-        self.tv_.column('State', anchor=CENTER, width=80)
-        self.tv_.column('Publication date', anchor=CENTER, width=100)
-        self.tv_.column('Notes', anchor=CENTER, width=80)
-        self.tv_.column('Key words', anchor=CENTER, width=250)
-
-        self.tv_.heading('#0', text='', anchor=CENTER)
-        self.tv_.heading('Video ID', text='Video ID', anchor=CENTER)
-        self.tv_.heading('Episode No.', text='Episode No.', anchor=CENTER)
-        self.tv_.heading('Title', text='Title', anchor=CENTER)
-        self.tv_.heading('State', text='State', anchor=CENTER)
-        self.tv_.heading('Publication date', text='Publication date', anchor=CENTER)
-        self.tv_.heading('Notes', text='Notes', anchor=CENTER)
-        self.tv_.heading('Key words', text='Key words', anchor=CENTER)
-        self.tv_.pack()
-        pub.sendMessage("but_1_show_videos_pressed", data = "Video ID")
+        self.arrange_video_tv()
+        pub.sendMessage("but_1_show_videos_clicked", data = "Video ID")
 
     
     def but_2_show_keywords_clicked(self):
         try:
             self.but_3_add_video_.pack_forget()
             self.but_4_sorting_.pack_forget()
-            self.tv_.pack_forget()
+            self.video_tv_.pack_forget()
         except AttributeError:
             pass
         self.but_1_show_videos_['state'] = tk.NORMAL
         self.but_2_show_keywords_['state'] = tk.DISABLED
-        #self.switch_button_state(self.but_1_show_videos_)
-        #self.switch_button_state(self.but_2_show_keywords_)
-        print("show keywords clicked")
+        self.arrange_keyword_tv()
+        value_inside = tk.StringVar(self.top_frame_2_)
+        value_inside.set("Sort by")
+        options_list = ["Keywords ID", "Name"]
+        self.but_5_sorting_alph_ = tk.OptionMenu(self.top_frame_2_, value_inside, *options_list, command=self.but_5_sorting_clicked)
+        self.but_5_sorting_alph_.pack(side=LEFT)
+        pub.sendMessage("but_2_show_keywords_clicked", data = "Video ID")
+
 
 
     def but_3_add_video_clicked(self, *args):
@@ -73,14 +64,58 @@ class View:
 
     def but_4_sorting_clicked(self, sorting_option):
         print(sorting_option)
-        for item in self.tv_.get_children():
-            self.tv_.delete(item)
-        pub.sendMessage("but_1_show_videos_pressed", data=sorting_option)
+        for item in self.video_tv_.get_children():
+            self.video_tv_.delete(item)
+        pub.sendMessage("but_1_show_videos_clicked", data=sorting_option)
         print("sorting changed")
+
+    def but_5_sorting_clicked(self, sorting_option):
+        for item in self.keyword_tv_.get_children():
+            self.keyword_tv_.delete(item)
+        pub.sendMessage("but_2_show_keywords_clicked", data=sorting_option)
+        print("sorting changed")
+
+    def arrange_video_tv(self):
+        self.video_tv_ = ttk.Treeview(self.bottom_frame_)
+        self.video_tv_['columns']=('Video ID', 'Episode No.', 'Title', 'State', 'Publication date', 'Notes', 'Key words')
+        self.video_tv_.column('#0', width=0, stretch=NO)
+        self.video_tv_.column('Video ID', anchor=CENTER, width=80)
+        self.video_tv_.column('Episode No.', anchor=CENTER, width=80)
+        self.video_tv_.column('Title', anchor=CENTER, width=80)
+        self.video_tv_.column('State', anchor=CENTER, width=80)
+        self.video_tv_.column('Publication date', anchor=CENTER, width=100)
+        self.video_tv_.column('Notes', anchor=CENTER, width=80)
+        self.video_tv_.column('Key words', anchor=CENTER, width=250)
+        self.video_tv_.heading('#0', text='', anchor=CENTER)
+        self.video_tv_.heading('Video ID', text='Video ID', anchor=CENTER)
+        self.video_tv_.heading('Episode No.', text='Episode No.', anchor=CENTER)
+        self.video_tv_.heading('Title', text='Title', anchor=CENTER)
+        self.video_tv_.heading('State', text='State', anchor=CENTER)
+        self.video_tv_.heading('Publication date', text='Publication date', anchor=CENTER)
+        self.video_tv_.heading('Notes', text='Notes', anchor=CENTER)
+        self.video_tv_.heading('Key words', text='Key words', anchor=CENTER)
+        self.video_tv_.pack()
+
+    def arrange_keyword_tv(self):
+        self.keyword_tv_ = ttk.Treeview(self.bottom_frame_)
+        self.keyword_tv_['columns']=('Keyword ID', 'Name', 'Episodes')
+        self.keyword_tv_.column('#0', width=0, stretch=NO)
+        self.keyword_tv_.column('Keyword ID', anchor=CENTER, width=80)
+        self.keyword_tv_.column('Name', anchor=CENTER, width=80)
+        self.keyword_tv_.column('Episodes', anchor=CENTER, width=80)
+        self.keyword_tv_.heading('#0', text='', anchor=CENTER)
+        self.keyword_tv_.heading('Keyword ID', text='Name', anchor=CENTER)
+        self.keyword_tv_.heading('Name', text='Name', anchor=CENTER)
+        self.keyword_tv_.heading('Episodes', text='Episodes', anchor=CENTER)
+        self.keyword_tv_.pack()
 
     def insert_videos_data(self, videos_information_array):
         for i, a in enumerate(videos_information_array):
-            self.tv_.insert(parent='', index = i, values=a)
+            self.video_tv_.insert(parent='', index = i, values=a)
+
+    def insert_keywords_data(self, keywords_information_array):
+        for i, a in enumerate(keywords_information_array):
+            self.keyword_tv_.insert(parent='', index = i, values=a)
 
     def set_up_layout(self):
         self.top_frame_.pack(side = TOP)

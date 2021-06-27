@@ -11,6 +11,10 @@ class ModelDB(Model):
         self.all_keywords_for_vid_ = """SELECT kw.name
                                     FROM Video v, VidKeyWord vkw, KeyWord kw
                                     WHERE v.video_id = vkw.video_id AND kw.keyword_id = vkw.keyword_id AND v.video_id = ?"""
+        self.all_keywords_for_vid_ = """SELECT v.title
+                            FROM Video v, VidKeyWord vkw, KeyWord kw
+                            WHERE v.video_id = vkw.video_id AND kw.keyword_id = vkw.keyword_id AND kw.keyword_id = ?"""
+        self.keywords_all_information_ = """SELECT * from KeyWord"""
 
     def get_videos_information_from_db(self):
         #get all objects from DB/desirialize objects
@@ -33,7 +37,6 @@ class ModelDB(Model):
             keywords = list(map(lambda tuple : tuple[0], keywords))
             v_list.append(keywords)
             videos_with_keywords.append(v_list)
-        ["Video ID", "Episode No.", "Title", "State","Publication date"]
         if sorting_option == "Episode No.":
             videos_with_keywords.sort(key=lambda x:x[1])
         elif sorting_option == "Title":
@@ -49,6 +52,32 @@ class ModelDB(Model):
 
     def get_videos_information(self, sorting_option = "Video ID"):
         pub.sendMessage("videos_information_ready", data = self.videos_data_array(sorting_option))
+
+    def get_keywords_information(self, sorting_option = "Keyword ID"):
+        pub.sendMessage("keywords_information_ready", data = self.keywords_data_array(sorting_option))
+
+    def keywords_data_array(self, sorting_option):
+        self.get_keywords_information_from_db()
+        keywords_with_titles = []
+        for kw in self.record_keywords_:
+            kw_list = list(kw)
+            kwid = kw[0]
+            titles = self.get_all_keywords_for_a_vid(kwid)
+            titles = list(map(lambda tuple : tuple[0], titles))
+            kw_list.append(titles)
+            keywords_with_titles.append(kw_list)
+        if sorting_option == "Keywords ID":
+            keywords_with_titles.sort(key=lambda x:x[0])
+        elif sorting_option == "Name":
+            keywords_with_titles.sort(key=lambda x:x[1])
+        else:
+            pass
+        return keywords_with_titles
+
+    def get_keywords_information_from_db(self):
+        self.c_.execute(self.keywords_all_information_)
+        self.record_keywords_ = self.c_.fetchall()
+    
     
     def __del__(self):
         self.conn_.close()
