@@ -1,7 +1,11 @@
+import datetime
 from pubsub import pub
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
+
+from video import Video
+
 
 class View:
 
@@ -65,18 +69,25 @@ class View:
         tk.Label(self.add_video_pop_up_, text="Notes").grid(row=4)
         tk.Label(self.add_video_pop_up_, text="Key Words").grid(row=5)
 
-        self.e_episode_no_ = tk.Entry(self.add_video_pop_up_)
-        self.e_title_ = tk.Entry(self.add_video_pop_up_)
-        self.e_state_ = tk.Entry(self.add_video_pop_up_)
-        self.e_publication_date_ = tk.Entry(self.add_video_pop_up_)
-        self.e_notes_ = tk.Entry(self.add_video_pop_up_)
-        self.e_key_words_ = tk.Entry(self.add_video_pop_up_)
-        self.e_episode_no_.grid(row=0, column=1)
-        self.e_title_.grid(row=1, column=1)
-        self.e_state_.grid(row=2, column=1)
-        self.e_publication_date_.grid(row=3, column=1)
-        self.e_notes_.grid(row=4, column=1)
-        self.e_key_words_.grid(row=5, column=1)
+        self.e_episode_no_ = tk.StringVar()
+        self.e_title_ = tk.StringVar()
+        self.e_state_ = tk.StringVar()
+        self.e_publication_date_ = tk.StringVar()
+        self.e_notes_ = tk.StringVar()
+        self.e_key_words_ = tk.StringVar()
+
+        e_episode_no = tk.Entry(self.add_video_pop_up_, textvariable=self.e_episode_no_)
+        e_title = tk.Entry(self.add_video_pop_up_, textvariable=self.e_title_)
+        e_state = tk.Entry(self.add_video_pop_up_, textvariable=self.e_state_)
+        e_publication_date = tk.Entry(self.add_video_pop_up_, textvariable=self.e_publication_date_)
+        e_notes = tk.Entry(self.add_video_pop_up_, textvariable=self.e_notes_)
+        e_key_words = tk.Entry(self.add_video_pop_up_, textvariable=self.e_key_words_)
+        e_episode_no.grid(row=0, column=1)
+        e_title.grid(row=1, column=1)
+        e_state.grid(row=2, column=1)
+        e_publication_date.grid(row=3, column=1)
+        e_notes.grid(row=4, column=1)
+        e_key_words.grid(row=5, column=1)
 
         self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command=self.but_6_submit_clicked)
         self.but_7_cancel_ = ttk.Button(self.add_video_pop_up_, text="Cancel", command=self.but_7_cancel_clicked)
@@ -100,12 +111,25 @@ class View:
         print("sorting changed")
 
     def but_6_submit_clicked(self):
-        print("submit clicked")#
+        print("submit clicked")
+        episode_no = self.e_episode_no_.get()
+        title = self.e_title_.get()
+        state = self.e_state_.get()
+        publication_date = self.e_publication_date_.get()
+        pub_date = datetime.datetime.strptime(publication_date, "%d.%m.%Y").date() #'24.05.2010'
+        notes = self.e_notes_.get()
+        key_words = self.e_key_words_.get()
+        key_words_list = key_words.split(", ")
+        print(episode_no, title, state, publication_date, notes, key_words)
+        print(key_words_list)
+        pub.sendMessage("but_6_submit_clicked", data = (Video(episode_no,title, state, pub_date, notes), key_words_list))
         self.add_video_pop_up_.destroy()
 
     def but_7_cancel_clicked(self):
         print("cancel clicked")
         self.add_video_pop_up_.destroy()
+#18/09/19
+#date_time_obj = datetime.strptime(date_time_str, '%d/%m/%y)
 
     def arrange_video_tv(self):
         self.video_tv_ = ttk.Treeview(self.bottom_frame_)
@@ -136,7 +160,7 @@ class View:
         self.keyword_tv_.column('Name', anchor=CENTER, width=100)
         self.keyword_tv_.column('Episodes', anchor=CENTER, width=400)
         self.keyword_tv_.heading('#0', text='', anchor=CENTER)
-        self.keyword_tv_.heading('Keyword ID', text='Name', anchor=CENTER)
+        self.keyword_tv_.heading('Keyword ID', text='Keyword ID', anchor=CENTER)
         self.keyword_tv_.heading('Name', text='Name', anchor=CENTER)
         self.keyword_tv_.heading('Episodes', text='Episodes', anchor=CENTER)
         self.keyword_tv_.pack()

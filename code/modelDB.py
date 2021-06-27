@@ -1,13 +1,23 @@
-import datetime
 import sqlite3
 from pubsub import pub
+
+from key_word import KeyWord
 from model import Model
+from video import Video
+from vid_key_word import VidKeyWord
 
 class ModelDB(Model):
     def __init__(self):
-        self.conn_ = sqlite3.connect("database/test.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        self.conn_ = sqlite3.connect("database/app_db.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
         self.c_ = self.conn_.cursor()
+        self.c_.execute(Video.create_table_)
+        self.c_.execute(KeyWord.create_table_)
+        self.c_.execute(VidKeyWord.create_table_)
+        self.conn_.commit()
+
         self.videos_all_information_ = """SELECT * from Video"""
+        self.all_keywords_ = """SELECT kw.name from KeyWord kw"""
+        self.keyword_id_for_name_ = """SELECT kw.keyword_id from KeyWord kw where kw.name = ?"""
         self.all_keywords_for_vid_ = """SELECT kw.name
                                     FROM Video v, VidKeyWord vkw, KeyWord kw
                                     WHERE v.video_id = vkw.video_id AND kw.keyword_id = vkw.keyword_id AND v.video_id = ?"""
@@ -78,7 +88,30 @@ class ModelDB(Model):
         self.c_.execute(self.keywords_all_information_)
         self.record_keywords_ = self.c_.fetchall()
     
-    
+    def add_video(self, data):
+        video_obj = data[0]
+        keywords_list = data[1]
+        print(video_obj)
+        self.c_.execute(Video.insert_replace_, video_obj.data_tuple())
+        self.conn_.commit()
+        self.c_.execute(self.all_keywords_)
+        all_keywords = self.c_.fetchall()
+        all_keywords =  list(map(lambda tuple : tuple[0], all_keywords))
+        for kw in keywords_list:
+            if kw not in all_keywords:
+                new_kw = KeyWord(kw)
+                kw_id = new_kw.keyword_id_
+                self.c_.execute(KeyWord.insert_replace_, new_kw.data_tuple())
+                self.conn_.commit()
+                
+            else:
+                self.c_.execute(self.keyword_id_for_name_, (kw,))
+                kw_id = self.c_.fetchone()[0]
+            new_vkw = VidKeyWord(video_obj.video_id_, kw_id)
+            self.c_.execute(VidKeyWord.insert_replace_, new_vkw.data_tuple())
+            self.conn_.commit()
+
+   
     def __del__(self):
         self.conn_.close()
 

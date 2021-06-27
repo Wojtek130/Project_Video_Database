@@ -9,3 +9,7 @@ class Model(ABC):
     @abstractmethod
     def get_keywords_information(self):
         pass
+
+    @abstractmethod
+    def add_video(self):
+        pass

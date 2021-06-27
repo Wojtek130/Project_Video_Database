@@ -33,7 +33,7 @@ class Video(Row):
         return
 
     def __str__(self):
-        return "Videp({0}, {1}, {2}, {3}, {4}, {5})".format(self.video_id_, self.episode_number_, self.title_, self.state_, self.publication_date_, self.notes_)
+        return "Video({0}, {1}, {2}, {3}, {4}, {5})".format(self.video_id_, self.episode_number_, self.title_, self.state_, self.publication_date_, self.notes_)
 
 
 
