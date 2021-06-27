@@ -14,8 +14,8 @@ class Controller:
         pub.subscribe(self.render_videos_information, "videos_information_ready")
         
 
-    def get_videos_information(self):
-        self.model_.get_videos_information()
+    def get_videos_information(self, data):
+        self.model_.get_videos_information(data)
 
     def render_videos_information(self, data):
         self.view_.insert_videos_data(data)

@@ -23,7 +23,7 @@ class ModelDB(Model):
         return self.c_.fetchall()
         #print(self.all_keywords_for_vid)
 
-    def videos_data_array(self):
+    def videos_data_array(self, sorting_option):
         self.get_videos_information_from_db()
         videos_with_keywords = []
         for v in self.record_videos_:
@@ -33,10 +33,22 @@ class ModelDB(Model):
             keywords = list(map(lambda tuple : tuple[0], keywords))
             v_list.append(keywords)
             videos_with_keywords.append(v_list)
+        ["Video ID", "Episode No.", "Title", "State","Publication date"]
+        if sorting_option == "Episode No.":
+            videos_with_keywords.sort(key=lambda x:x[1])
+        elif sorting_option == "Title":
+            videos_with_keywords.sort(key=lambda x:x[2])
+        elif sorting_option == "State":
+            videos_with_keywords.sort(key=lambda x:x[3])
+        elif sorting_option == "Publication date":
+            videos_with_keywords.sort(key=lambda x:x[4])
+        else:
+            pass
+
         return videos_with_keywords
 
-    def get_videos_information(self):
-        pub.sendMessage("videos_information_ready", data = self.videos_data_array())
+    def get_videos_information(self, sorting_option = "Video ID"):
+        pub.sendMessage("videos_information_ready", data = self.videos_data_array(sorting_option))
     
     def __del__(self):
         self.conn_.close()

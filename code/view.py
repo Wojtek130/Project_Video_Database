@@ -46,7 +46,7 @@ class View:
         self.tv_.heading('Notes', text='Notes', anchor=CENTER)
         self.tv_.heading('Key words', text='Key words', anchor=CENTER)
         self.tv_.pack()
-        pub.sendMessage("but_1_show_videos_pressed")
+        pub.sendMessage("but_1_show_videos_pressed", data = "Video ID")
 
     
     def but_2_show_keywords_clicked(self):
@@ -71,14 +71,16 @@ class View:
         label.pack_propagate()
         print("add video")
 
-    def but_4_sorting_clicked(self, *args):
+    def but_4_sorting_clicked(self, sorting_option):
+        print(sorting_option)
+        for item in self.tv_.get_children():
+            self.tv_.delete(item)
+        pub.sendMessage("but_1_show_videos_pressed", data=sorting_option)
         print("sorting changed")
 
     def insert_videos_data(self, videos_information_array):
         for i, a in enumerate(videos_information_array):
             self.tv_.insert(parent='', index = i, values=a)
-
-
 
     def set_up_layout(self):
         self.top_frame_.pack(side = TOP)
