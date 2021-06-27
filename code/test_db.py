@@ -23,7 +23,7 @@ class TestDB(unittest.TestCase):
         cls.c = cls.conn.cursor()
 
         cls.c.execute(Video.create_table_)
-        cls.vid_1 = Video(2, "test video", "working on",  datetime.date(2014,4,28), "goes onaa")        
+        cls.vid_1 = Video(2, "test_video", "working on",  datetime.date(2014,4,28), "goes onaa")        
         cls.c.execute(Video.insert_replace_, cls.vid_1.data_tuple())
         cls.conn.commit()
 
