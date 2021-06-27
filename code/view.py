@@ -1,6 +1,7 @@
+from pubsub import pub
 import tkinter as tk
 from tkinter import *
-from pubsub import pub
+from tkinter import ttk
 
 class View:
 
@@ -22,9 +23,29 @@ class View:
         self.but_3_add_video_.pack( side=LEFT)
         value_inside = tk.StringVar(self.top_frame_2_)
         value_inside.set("Sort by")
-        options_list = ["Video ID", "Episode No.", "Title", "state","Publication data"]
+        options_list = ["Video ID", "Episode No.", "Title", "State","Publication date"]
         self.but_4_sorting_ = tk.OptionMenu(self.top_frame_2_, value_inside, *options_list, command=self.but_4_sorting_clicked)
         self.but_4_sorting_.pack(side=LEFT)
+        self.tv_ = ttk.Treeview(self.bottom_frame_)
+        self.tv_['columns']=('Video ID', 'Episode No.', 'Title', 'State', 'Publication date', 'Notes', 'Key words')
+        self.tv_.column('#0', width=0, stretch=NO)
+        self.tv_.column('Video ID', anchor=CENTER, width=80)
+        self.tv_.column('Episode No.', anchor=CENTER, width=80)
+        self.tv_.column('Title', anchor=CENTER, width=80)
+        self.tv_.column('State', anchor=CENTER, width=80)
+        self.tv_.column('Publication date', anchor=CENTER, width=100)
+        self.tv_.column('Notes', anchor=CENTER, width=80)
+        self.tv_.column('Key words', anchor=CENTER, width=80)
+
+        self.tv_.heading('#0', text='', anchor=CENTER)
+        self.tv_.heading('Video ID', text='Video ID', anchor=CENTER)
+        self.tv_.heading('Episode No.', text='Episode No.', anchor=CENTER)
+        self.tv_.heading('Title', text='Title', anchor=CENTER)
+        self.tv_.heading('State', text='State', anchor=CENTER)
+        self.tv_.heading('Publication date', text='Publication date', anchor=CENTER)
+        self.tv_.heading('Notes', text='Notes', anchor=CENTER)
+        self.tv_.heading('Key words', text='Key words', anchor=CENTER)
+        self.tv_.pack()
         pub.sendMessage("but_1_show_videos_clicked")
 
     
@@ -32,6 +53,7 @@ class View:
         try:
             self.but_3_add_video_.pack_forget()
             self.but_4_sorting_.pack_forget()
+            self.tv_.pack_forget()
         except AttributeError:
             pass
         self.but_1_show_videos_['state'] = tk.NORMAL
@@ -42,6 +64,11 @@ class View:
 
 
     def but_3_add_video_clicked(self, *args):
+        var = StringVar()
+        label = Label( self.bottom_frame_, textvariable=var )
+
+        var.set("Hey!? How are you doing?")
+        label.pack_propagate()
         print("add video")
 
     def but_4_sorting_clicked(self, *args):
