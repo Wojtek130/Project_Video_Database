@@ -26,14 +26,15 @@ class KeyWord(Row):
         return (self.keyword_id_, self.name_)
 
 
-    @classmethod #maybe it should be a class method (pro)
+    @classmethod
     def key_word_id_inc(self):
         self.current_key_word_id_ += 1
-        return
+    
+    @classmethod
+    def set_keyword_id_(self, value):
+        self.current_key_word_id_ = value
 
 
 if __name__ == "__main__":
     kw1 = KeyWord("bread")
-    print(kw1.keyword_id_)
     kw2 = KeyWord("butter")
-    print(kw2.keyword_id_)

@@ -166,6 +166,7 @@ class View:
         self.keyword_tv_.pack()
 
     def insert_videos_data(self, videos_information_array):
+        print("/////////", videos_information_array)
         for i, a in enumerate(videos_information_array):
             self.video_tv_.insert(parent='', index = i, values=a)
 

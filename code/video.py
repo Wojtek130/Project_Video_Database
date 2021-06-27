@@ -27,10 +27,14 @@ class Video(Row):
     def data_tuple(self):
         return (self.video_id_, self.episode_number_, self.title_, self.state_, self.publication_date_, self.notes_,)
 
-    @classmethod #maybe it should be a static method (pro)
+    @classmethod 
     def video_id_inc(self):
         self.current_video_id_ += 1
         return
+
+    @classmethod
+    def set_video_id_(self, value):
+        self.current_video_id_ = value
 
     def __str__(self):
         return "Video({0}, {1}, {2}, {3}, {4}, {5})".format(self.video_id_, self.episode_number_, self.title_, self.state_, self.publication_date_, self.notes_)
@@ -39,7 +43,5 @@ class Video(Row):
 
 if __name__ == "__main__":
     v1 = Video()
-    #print(v1.video_id_)
     v2 = Video()
-   # print(v2.video_id_)
 

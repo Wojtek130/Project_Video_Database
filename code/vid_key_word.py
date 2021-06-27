@@ -28,4 +28,7 @@ class VidKeyWord(Row):
     @classmethod
     def vid_key_word_id_inc(self):
         self.current_vid_key_word_id_ += 1
-        return
+
+    @classmethod
+    def set_vid_key_word_id_(self, value):
+        self.current_vid_key_word_id_ = value

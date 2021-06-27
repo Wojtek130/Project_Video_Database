@@ -14,7 +14,9 @@ class ModelDB(Model):
         self.c_.execute(KeyWord.create_table_)
         self.c_.execute(VidKeyWord.create_table_)
         self.conn_.commit()
-
+        self.set_current_video_id()
+        self.set_current_keyword_id()
+        self.set_current_vid_keyword_id()
         self.videos_all_information_ = """SELECT * from Video"""
         self.all_keywords_ = """SELECT kw.name from KeyWord kw"""
         self.keyword_id_for_name_ = """SELECT kw.keyword_id from KeyWord kw where kw.name = ?"""
@@ -25,24 +27,22 @@ class ModelDB(Model):
                             FROM Video v, VidKeyWord vkw, KeyWord kw
                             WHERE v.video_id = vkw.video_id AND kw.keyword_id = vkw.keyword_id AND kw.keyword_id = ?"""
         self.keywords_all_information_ = """SELECT * from KeyWord"""
+        
 
     def get_videos_information_from_db(self):
-        #get all objects from DB/desirialize objects
         self.c_.execute(self.videos_all_information_)
         self.record_videos_ = self.c_.fetchall()
-       # print(self.record_videos_)
 
     def get_all_keywords_for_a_vid(self, video_id):
         self.c_.execute(self.all_keywords_for_vid_, (video_id,))
         return self.c_.fetchall()
-        #print(self.all_keywords_for_vid)
 
     def videos_data_array(self, sorting_option):
         self.get_videos_information_from_db()
         videos_with_keywords = []
         for v in self.record_videos_:
             v_list = list(v)
-            vid = v[0]
+            vid = v_list[0]
             keywords = self.get_all_keywords_for_a_vid(vid)
             keywords = list(map(lambda tuple : tuple[0], keywords))
             v_list.append(keywords)
@@ -57,7 +57,6 @@ class ModelDB(Model):
             videos_with_keywords.sort(key=lambda x:x[4])
         else:
             pass
-
         return videos_with_keywords
 
     def get_videos_information(self, sorting_option = "Video ID"):
@@ -91,7 +90,6 @@ class ModelDB(Model):
     def add_video(self, data):
         video_obj = data[0]
         keywords_list = data[1]
-        print(video_obj)
         self.c_.execute(Video.insert_replace_, video_obj.data_tuple())
         self.conn_.commit()
         self.c_.execute(self.all_keywords_)
@@ -102,14 +100,37 @@ class ModelDB(Model):
                 new_kw = KeyWord(kw)
                 kw_id = new_kw.keyword_id_
                 self.c_.execute(KeyWord.insert_replace_, new_kw.data_tuple())
-                self.conn_.commit()
-                
+                self.conn_.commit()  
             else:
                 self.c_.execute(self.keyword_id_for_name_, (kw,))
                 kw_id = self.c_.fetchone()[0]
             new_vkw = VidKeyWord(video_obj.video_id_, kw_id)
             self.c_.execute(VidKeyWord.insert_replace_, new_vkw.data_tuple())
             self.conn_.commit()
+
+    def set_current_video_id(self):
+        self.c_.execute("""SELECT COUNT(*) FROM Video """)
+        result = self.c_.fetchone()[0]
+        if result > 0:
+            self.c_.execute("""SELECT MAX(video_id) FROM Video""")
+            max_id = self.c_.fetchone()[0]
+            Video.set_video_id_(int(max_id) + 1)
+
+    def set_current_keyword_id(self):
+        self.c_.execute("""SELECT COUNT(*) FROM KeyWord """)
+        result = self.c_.fetchone()[0]
+        if result > 0:
+            self.c_.execute("""SELECT MAX(keyword_id) FROM KeyWord""")
+            max_id = self.c_.fetchone()[0]
+            KeyWord.set_keyword_id_(int(max_id) + 1)
+
+    def set_current_vid_keyword_id(self):
+        self.c_.execute("""SELECT COUNT(*) FROM VidKeyWord """)
+        result = self.c_.fetchone()[0]
+        if result > 0:
+            self.c_.execute("""SELECT MAX(vid_keyword_id) FROM VidKeyWord""")
+            max_id = self.c_.fetchone()[0]
+            VidKeyWord.set_vid_key_word_id_(int(max_id) + 1)
 
    
     def __del__(self):
@@ -119,4 +140,3 @@ if __name__ == "__main__":
     m = ModelDB()
    # m.get_videos_information()
    # m.get_all_keywords_for_a_vid(1)
-    print(m.videos_data_array())
