@@ -1,5 +1,5 @@
 import datetime
-import os
+#import os
 import sqlite3
 import unittest
 
@@ -15,7 +15,7 @@ class TestDB(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
-        os.remove("database/test.db")
+       # os.remove("database/test.db")
 
     @classmethod
     def setUpClass(cls):

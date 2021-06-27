@@ -14,6 +14,13 @@ class View:
 
     def load_table(self):
         print("loading table")
+        self.but_3_add_video_ = tk.Button(self.top_frame_2_, text = "Add Video",command = self.load_table)
+        self.but_3_add_video_.pack( side=LEFT)
+        value_inside = tk.StringVar(self.top_frame_2_)
+        value_inside.set("Sort by")
+        options_list = ["Video ID", "Episode No.", "Title", "state","Publication data"]
+        self.option_menu_1_sort_ = tk.OptionMenu(self.top_frame_2_, value_inside, *options_list, command=self.sorting_changed)
+        self.option_menu_1_sort_.pack(side=LEFT)
         pub.sendMessage("load_table")
 
     def set_up_layout(self):
@@ -21,6 +28,7 @@ class View:
         self.bottom_frame_.pack (side=BOTTOM)
         self.top_frame_2_.pack(side = TOP)
         self.but_1_show_table_.pack( side=LEFT)
+        self.but_2_show_table_.pack( side=LEFT)
         #self.b2LineDetect.pack(side = RIGHT)
         #self.scale4.pack(side=BOTTOM) #max line gap
         #self.scale3.pack(side=BOTTOM) #min line lenght
@@ -34,9 +42,13 @@ class View:
         self.bottom_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="black",highlightcolor="red",highlightthickness=1,width=500, height=600)
         self.top_frame_2_ = Frame(self.top_frame_)
         #button
-        self.but_1_show_table_ = tk.Button(self.top_frame_2_, text = "Show table",command = self.load_table)
+        self.but_1_show_table_ = tk.Button(self.top_frame_2_, text = "Videos Table",command = self.load_table)
+        self.but_2_show_table_ = tk.Button(self.top_frame_2_, text = "Keywords Table",command = self.load_table)
         #self.panelA = tk.Label(self.bottom_frame_, text = 'image here')
         return
+
+    def sorting_changed(self, *args):
+        print("sorting changed")
     
 
 
