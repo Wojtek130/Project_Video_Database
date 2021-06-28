@@ -16,7 +16,7 @@ In the main app window there are 3 buttons:
 * "Keywords Table" - enables viewing keywords and their corresponding videos that have been added to the database so far (there are multiple sorting options)
 
 ## Class Diagram
-![](https://i.imgur.com/9qkWovS.png)
+![](https://i.imgur.com/71ijpfS.png)
 
 ## Running the program
 

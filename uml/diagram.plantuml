@@ -190,6 +190,18 @@ Row --> VidKeyWord
 
 Model --> ModelDB
 
+Test o-- Video
+
+Test o-- KeyWord
+
+Test o-- VidKeyWord
+
+ModelDB o-- Video
+
+ModelDB o-- KeyWord
+
+ModelDB o-- VidKeyWord
+
 unittest.TestCase --> Test
 
 abc.ABC --> Row
