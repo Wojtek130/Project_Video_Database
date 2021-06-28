@@ -1,40 +1,182 @@
 @startuml Class Diagram
 
 abstract class Row{
-    -stats()
+    + {abstract} data_tuple()
+    + {abstract} create_table()
+    + {abstract} insert_replace_
+    + {abstract} upsert_
 }
 class Controller{
-    -model_
-    -view_
+    + model_
+    + view_
+    + main_window_
+    + get_videos_information(data)
+    + render_videos_information(data)
+    + get_keywords_information(data)
+    + render_keywords_information(data)
+    + add_video(data)
+
 }
 abstract class Model{
-    #save()
-    #get_Row()
+    + {abstract} get_videos_information()
+    + {abstract} get_keywords_information()
+    + {abstract} add_video
 }
 class ModelDB{
-    -db_
+    + conn_
+    + c_
+    + videos_all_information_
+    + all_keywords_
+    + keyword_id_for_name_
+    + all_keywords_for_vid_
+    + all_titles_for_kwid_
+    + keywords_all_information_
+    + record_videos_
+    + get_videos_information_from_db()
+    + get_all_keywords_for_a_vid(video_id)
+    + get_all_titles_for_a_kwid(keyword_id)
+    + videos_data_array(sorting_option)
+    + get_videos_information(sorting_option)
+    + get_keywords_information(sorting_option)
+    + keywords_data_array(sorting_option)
+    + get_keywords_information_from_db()
+    + add_video(data)
+    + set_current_video_id()
+    + set_current_keyword_id()
+    + set_current_vid_keyword_id()
+    # __del__()
+
+
+
 }
-class KeyWords{
-    -key_word_id_
-    -name_
+class KeyWord{
+    + data_tuple()
+    + create_table()
+    + key_word_id_inc()
+    + set_keyword_id_(value)
+    # __str__()
+    + insert_replace_
+    + upsert_
+    + current_key_word_id_
+    + keyword_id_
+    + name_
+    + notes_
+    + upsert_
+    + insert_replace_
+    + create_table_
+}
+
+class VidKeyWord{
+    + data_tuple()
+    + create_table()
+    + key_word_id_inc()
+    + set_keyword_id_(value)
+    # __str__()
+    + insert_replace_
+    + upsert_
+    + current_vid_key_word_id_
+    + vid_key_word_id_
+    + video_id_
+    + keyword_id_
+    + name_
+    + notes_
+    + upsert_
+    + insert_replace_
+    + create_table_
 }
 
 class View{
-    -container_
-    #set_up()
+    + main_window_
+    + set_up()
+    + create_widgets()
+    + set_up_layout()
+    + but_1_show_videos_clicked()
+    + but_2_show_keywords_clicked()
+    + but_3_add_video_clicked()
+    + but_4_sorting_clicked(sorting_option)
+    + but_5_sorting_clicked(sorting_option)
+    + but_6_submit_clicked()
+    + but_7_submit_clicked()
+    + arrange_video_tv()
+    + arrange_keyword_tv()
+    + insert_videos_data()
+    + insert_keywords_data()
+    + switch_button_state()
+    + but_1_show_videos_
+    + but_2_show_keywords_
+    + but_4_sorting_
+    + but_5_sorting_alph_
+    + but_6_submit_
+    + but_7_cancel_
+    + video_tv_
+    + keyword_tv_
+    + add_video_pop_up_
+    + e_episode_no_
+    + e_title_
+    + e_state_
+    + e_publication_date_
+    + e_notes_
+    + e_key_words_
+
 }
 class Video {
-    #video_id_
-    #episode_number_
-    #key_word_ids_
-    #title_
-    #state
-    #publication_date_
-    #notes_
+    +  data_tuple()
+    + create_table()
+    + video_id_inc()
+    + set_video_id_(value)
+    # __str__()
+    + insert_replace_
+    + upsert_
+    + current_video_id_
+    + video_id_
+    + episode_number_
+    + title_
+    + state
+    + publication_date_
+    + notes_
+    + upsert_
+    + insert_replace_
+    + create_table_
 }
 
+class unittest.TestCase{
+    
+}
 
-class Test
+class abc.ABC{
+    
+}
+
+class Test{
+    + conn
+    + c
+    + vid_1
+    + vid_2
+    + kw_1
+    + kw_2
+    + kw_3
+    + vkw_1
+    + vkw_2
+    + vkw_3
+    + vkw_4
+    + {static} setUpClass(cls)
+    + {static} tearDownClass(cls)
+    + setUp()
+    + tearDown()
+    + test_vid()
+    + test_episode_no()
+    + test_title()
+    + test_state()
+    + test_pub_date()
+    + test_notes()
+    + test_kw1_id()
+    + test_kw1_name()
+    + test_kw2_id()
+    + test_kw2_name()
+    + test_vkw1_vid()
+    + test_vkw1_kwid()
+    + test_vid1_keywords()
+}
 
 Controller *-- Model
 
@@ -42,9 +184,15 @@ Controller *-- View
 
 Row --> Video
 
-Video o-- KeyWords
+Row --> KeyWord
+
+Row --> VidKeyWord
 
 Model --> ModelDB
+
+unittest.TestCase --> Test
+
+abc.ABC --> Row
 
 
 @enduml

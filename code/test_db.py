@@ -125,7 +125,6 @@ class TestDB(unittest.TestCase):
         print('test_name_kw_2')
         self.assertEqual(self.record_kw_2[1], self.kw_2.name_)
 
-    
     def test_vkw1_vkwid(self):
         print('test_vkwid_vkw_1')
         self.assertEqual(self.record_vkw_1[0], self.vkw_1.vid_key_word_id_)
