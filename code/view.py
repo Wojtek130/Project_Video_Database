@@ -106,7 +106,7 @@ class View:
         pub_date = datetime.datetime.strptime(publication_date, "%d.%m.%Y").date() #'24.05.2010'
         notes = self.e_notes_.get()
         key_words = self.e_key_words_.get()
-        key_words_list = key_words.split(", ")
+        key_words_list = list(set(key_words.split(", ")))
         pub.sendMessage("but_6_submit_clicked", data = (Video(episode_no,title, state, pub_date, notes), key_words_list))
         self.add_video_pop_up_.destroy()
 
