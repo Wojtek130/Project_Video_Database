@@ -8,7 +8,7 @@ from vid_key_word import VidKeyWord
 
 class ModelDB(Model):
     def __init__(self):
-        self.conn_ = sqlite3.connect("database/app_db.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        self.conn_ = sqlite3.connect("database/app_db3.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
         self.c_ = self.conn_.cursor()
         self.c_.execute(Video.create_table_)
         self.c_.execute(KeyWord.create_table_)
@@ -52,13 +52,25 @@ class ModelDB(Model):
             v_list.append(keywords)
             videos_with_keywords.append(v_list)
         if sorting_option == "Episode No.":
-            videos_with_keywords.sort(key=lambda x:x[1])
+            try:
+                videos_with_keywords.sort(key=lambda x:x[1])
+            except TypeError:
+                print("Values of diffrent type cannot be sorted")
         elif sorting_option == "Title":
-            videos_with_keywords.sort(key=lambda x:x[2])
+            try:
+                videos_with_keywords.sort(key=lambda x:x[2])
+            except TypeError:
+                print("Values of diffrent type cannot be sorted")
         elif sorting_option == "State":
-            videos_with_keywords.sort(key=lambda x:x[3])
+            try:
+                videos_with_keywords.sort(key=lambda x:x[3])
+            except TypeError:
+                print("Values of diffrent type cannot be sorted")
         elif sorting_option == "Publication date":
-            videos_with_keywords.sort(key=lambda x:x[4])
+            try:
+                videos_with_keywords.sort(key=lambda x:x[4])
+            except TypeError:
+                print("Values of diffrent type cannot be sorted")
         else:
             pass
         return videos_with_keywords
@@ -80,9 +92,15 @@ class ModelDB(Model):
             kw_list.append(titles)
             keywords_with_titles.append(kw_list)
         if sorting_option == "Keywords ID":
-            keywords_with_titles.sort(key=lambda x:x[0])
+            try:
+                keywords_with_titles.sort(key=lambda x:x[0])
+            except TypeError:
+                print("Values of diffrent type cannot be sorted")
         elif sorting_option == "Name":
-            keywords_with_titles.sort(key=lambda x:x[1])
+            try:
+                keywords_with_titles.sort(key=lambda x:x[1])
+            except TypeError:
+                print("Values of diffrent type cannot be sorted")
         else:
             pass
         return keywords_with_titles

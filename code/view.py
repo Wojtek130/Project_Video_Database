@@ -53,10 +53,6 @@ class View:
 
 
     def but_3_add_video_clicked(self, *args):
-        #var = StringVar()
-        #label = Label( self.bottom_frame_, textvariable=var )
-        #var.set("Hey!? How are you doing?")
-        #label.pack_propagate()
         self.add_video_pop_up_ = tk.Toplevel()
         self.add_video_pop_up_.wm_title("Add Video")
         self.add_video_pop_up_.grab_set()
@@ -116,8 +112,6 @@ class View:
 
     def but_7_cancel_clicked(self):
         self.add_video_pop_up_.destroy()
-#18/09/19
-#date_time_obj = datetime.strptime(date_time_str, '%d/%m/%y)
 
     def arrange_video_tv(self):
         self.video_tv_ = ttk.Treeview(self.bottom_frame_)
