@@ -31,9 +31,14 @@ class View:
         value_inside.set("Sort by")
         options_list = ["Video ID", "Episode No.", "Title", "State","Publication date"]
         self.but_4_sorting_ = tk.OptionMenu(self.top_frame_2_, value_inside, *options_list, command=self.but_4_sorting_clicked)
+        self.but_8_edit_ = tk.Button(self.top_frame_2_, text = "Edit",command = self.but_8_edit_clicked)
+        self.but_9_delete_ = tk.Button(self.top_frame_2_, text = "Delete",command = self.but_9_delete_clicked)
         self.but_4_sorting_.pack(side=LEFT)
         self.but_8_edit_.pack(side=LEFT)
         self.but_9_delete_.pack(side=LEFT)
+        print("hah")
+        self.but_8_edit_['state'] = tk.DISABLED
+        self.but_9_delete_['state'] = tk.DISABLED
         self.arrange_video_tv()
         pub.sendMessage("but_1_show_videos_clicked", data = "Video ID")
 
@@ -145,6 +150,7 @@ class View:
         self.video_tv_.heading('Notes', text='Notes', anchor=CENTER)
         self.video_tv_.heading('Key words', text='Key words', anchor=CENTER)
         self.video_tv_.pack()
+        self.video_tv_.bind("<Button-1>", self.tv_single_click)
         self.video_tv_.bind("<Double-1>", self.tv_double_click)
 
     def arrange_keyword_tv(self):
@@ -186,8 +192,8 @@ class View:
         self.but_1_show_videos_ = tk.Button(self.top_frame_2_, text = "Videos Table",command = self.but_1_show_videos_clicked)
         self.but_2_show_keywords_ = tk.Button(self.top_frame_2_, text = "Keywords Table",command = self.but_2_show_keywords_clicked)
         self.but_3_add_video_ = tk.Button(self.top_frame_2_, text = "Add Video",command = self.but_3_add_video_clicked)
-        self.but_8_edit_ = tk.Button(self.top_frame_2_, text = "Edit",command = self.but_8_edit_clicked)
-        self.but_9_delete_ = tk.Button(self.top_frame_2_, text = "Delete",command = self.but_9_delete_clicked)
+        #self.but_8_edit_ = tk.Button(self.top_frame_2_, text = "Edit",command = self.but_8_edit_clicked)
+        #self.but_9_delete_ = tk.Button(self.top_frame_2_, text = "Delete",command = self.but_9_delete_clicked)
         
 
     def switch_button_state(self, button):
@@ -201,6 +207,12 @@ class View:
         values = self.video_tv_.item(curItem, 'values')
         print(values)
         #print(self.video_tv_.item(curItem))
+    
+    def tv_single_click(self, event):
+        print("single click")
+        self.but_8_edit_["state"] = tk.NORMAL
+        self.but_9_delete_["state"] = tk.NORMAL
+
     
 
 if __name__=="__main__":
