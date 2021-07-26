@@ -150,8 +150,9 @@ class View:
         self.video_tv_.heading('Notes', text='Notes', anchor=CENTER)
         self.video_tv_.heading('Key words', text='Key words', anchor=CENTER)
         self.video_tv_.pack()
-        self.video_tv_.bind("<Button-1>", self.tv_single_click)
+        #self.video_tv_.bind("<Button-1>", self.tv_single_click)
         self.video_tv_.bind("<Double-1>", self.tv_double_click)
+        self.video_tv_.bind("<<TreeviewSelect>>", self.tv_select_click)
 
     def arrange_keyword_tv(self):
         self.keyword_tv_ = ttk.Treeview(self.bottom_frame_)
@@ -208,10 +209,24 @@ class View:
         print(values)
         #print(self.video_tv_.item(curItem))
     
-    def tv_single_click(self, event):
-        print("single click")
+  #  def tv_single_click(self, event):
+   #     print("single click")
+    #    self.but_8_edit_["state"] = tk.NORMAL
+     #
+     #    self.but_9_delete_["state"] = tk.NORMAL
+       # curItem = self.video_tv_.focus()
+        #print(curItem)
+        #values = self.video_tv_.item(curItem, 'values')
+        
+        #print(values)
+
+    def tv_select_click(self, event):
+        print("select click")
         self.but_8_edit_["state"] = tk.NORMAL
         self.but_9_delete_["state"] = tk.NORMAL
+        curItem = self.video_tv_.focus()
+        values = self.video_tv_.item(curItem, 'values')
+        print(values)
 
     
 
