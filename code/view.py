@@ -7,6 +7,8 @@ from tkinter import ttk
 from video import Video
 
 
+
+
 class View:
 
     def __init__(self, main_window):
@@ -30,6 +32,8 @@ class View:
         options_list = ["Video ID", "Episode No.", "Title", "State","Publication date"]
         self.but_4_sorting_ = tk.OptionMenu(self.top_frame_2_, value_inside, *options_list, command=self.but_4_sorting_clicked)
         self.but_4_sorting_.pack(side=LEFT)
+        self.but_8_edit_.pack(side=LEFT)
+        self.but_9_delete_.pack(side=LEFT)
         self.arrange_video_tv()
         pub.sendMessage("but_1_show_videos_clicked", data = "Video ID")
 
@@ -38,6 +42,8 @@ class View:
         try:
             self.but_4_sorting_.pack_forget()
             self.video_tv_.pack_forget()
+            self.but_8_edit_.pack_forget()
+            self.but_9_delete_.pack_forget()
         except AttributeError:
             pass
         self.but_1_show_videos_['state'] = tk.NORMAL
@@ -113,6 +119,12 @@ class View:
     def but_7_cancel_clicked(self):
         self.add_video_pop_up_.destroy()
 
+    def but_8_edit_clicked(self):
+        print("Edit clicked")
+
+    def but_9_delete_clicked(self):
+        print("Delete clicked")
+
     def arrange_video_tv(self):
         self.video_tv_ = ttk.Treeview(self.bottom_frame_)
         self.video_tv_['columns']=('Video ID', 'Episode No.', 'Title', 'State', 'Publication date', 'Notes', 'Key words')
@@ -133,6 +145,7 @@ class View:
         self.video_tv_.heading('Notes', text='Notes', anchor=CENTER)
         self.video_tv_.heading('Key words', text='Key words', anchor=CENTER)
         self.video_tv_.pack()
+        self.video_tv_.bind("<Double-1>", self.tv_double_click)
 
     def arrange_keyword_tv(self):
         self.keyword_tv_ = ttk.Treeview(self.bottom_frame_)
@@ -173,6 +186,8 @@ class View:
         self.but_1_show_videos_ = tk.Button(self.top_frame_2_, text = "Videos Table",command = self.but_1_show_videos_clicked)
         self.but_2_show_keywords_ = tk.Button(self.top_frame_2_, text = "Keywords Table",command = self.but_2_show_keywords_clicked)
         self.but_3_add_video_ = tk.Button(self.top_frame_2_, text = "Add Video",command = self.but_3_add_video_clicked)
+        self.but_8_edit_ = tk.Button(self.top_frame_2_, text = "Edit",command = self.but_8_edit_clicked)
+        self.but_9_delete_ = tk.Button(self.top_frame_2_, text = "Delete",command = self.but_9_delete_clicked)
         
 
     def switch_button_state(self, button):
@@ -180,6 +195,12 @@ class View:
             button['state'] = tk.DISABLED
         else:
             button['state'] = tk.NORMAL
+
+    def tv_double_click(self, event):
+        curItem = self.video_tv_.focus()
+        values = self.video_tv_.item(curItem, 'values')
+        print(values)
+        #print(self.video_tv_.item(curItem))
     
 
 if __name__=="__main__":
