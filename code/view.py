@@ -13,6 +13,10 @@ class View:
 
     def __init__(self, main_window):
         self.main_window_ = main_window
+        self.style_ = ttk.Style()
+        self.style_.theme_use("clam")
+        self.style_.map('Treeview', foreground=self.fixed_map('foreground'), background=self.fixed_map('background'))     
+        self.style_.configure("Treeview.Heading", font=('Calibri', 10,'bold'), background="#bfbfbf")
         return
 
     def set_up(self):
@@ -137,8 +141,8 @@ class View:
         print("Delete clicked")
 
     def arrange_video_tv(self):
-        style = ttk.Style()
-        style.map('Treeview', foreground=self.fixed_map(style, 'foreground'), background=self.fixed_map(style, 'background'))
+        #style = ttk.Style()
+        #style.map('Treeview', foreground=self.fixed_map(style, 'foreground'), background=self.fixed_map(style, 'background'))
         self.video_tv_ = ttk.Treeview(self.bottom_frame_)
         self.video_tv_['columns']=('Video ID', 'Episode No.', 'Title', 'State', 'Publication date', 'Notes', 'Key words')
         self.video_tv_.column('#0', width=0, stretch=NO)
@@ -242,8 +246,8 @@ class View:
         values = self.video_tv_.item(current_record, 'values')
         #print(values)
 
-    def fixed_map(self, style, option):
-        return [elm for elm in style.map('Treeview', query_opt=option) if
+    def fixed_map(self, option):
+        return [elm for elm in self.style_.map('Treeview', query_opt=option) if
             elm[:2] != ('!disabled', '!selected')]
     
 
