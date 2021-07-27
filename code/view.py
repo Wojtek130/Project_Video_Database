@@ -137,6 +137,8 @@ class View:
         print("Delete clicked")
 
     def arrange_video_tv(self):
+        style = ttk.Style()
+        style.map('Treeview', foreground=self.fixed_map(style, 'foreground'), background=self.fixed_map(style, 'background'))
         self.video_tv_ = ttk.Treeview(self.bottom_frame_)
         self.video_tv_['columns']=('Video ID', 'Episode No.', 'Title', 'State', 'Publication date', 'Notes', 'Key words')
         self.video_tv_.column('#0', width=0, stretch=NO)
@@ -155,6 +157,10 @@ class View:
         self.video_tv_.heading('Publication date', text='Publication date', anchor=CENTER)
         self.video_tv_.heading('Notes', text='Notes', anchor=CENTER)
         self.video_tv_.heading('Key words', text='Key words', anchor=CENTER)
+        self.video_tv_.tag_configure('nic', background='white')
+        self.video_tv_.tag_configure('nagrane', background='#36c5f5')
+        self.video_tv_.tag_configure('obrabiane', background='red')
+        self.video_tv_.tag_configure('opublikowane', background='#7cf536')
         self.video_tv_.pack()
         #self.video_tv_.bind("<Button-1>", self.tv_single_click)
         self.video_tv_.bind("<Double-1>", self.tv_double_click)
@@ -175,7 +181,9 @@ class View:
 
     def insert_videos_data(self, videos_information_array):
         for i, a in enumerate(videos_information_array):
-            self.video_tv_.insert(parent='', index = i, values=a)
+            state_tag = a[3]
+            self.video_tv_.insert(parent='', index = i, values=a, tags=(state_tag,))
+        
 
     def insert_keywords_data(self, keywords_information_array):
         for i, a in enumerate(keywords_information_array):
@@ -212,7 +220,7 @@ class View:
     def tv_double_click(self, event):
         current_record = self.video_tv_.focus()
         values = self.video_tv_.item(current_record, 'values')
-        print(values)
+        #print(values)
         #print(self.video_tv_.item(curItem))
     
   #  def tv_single_click(self, event):
@@ -227,13 +235,16 @@ class View:
         #print(values)
 
     def tv_select_click(self, event):
-        print("select click")
+        #print("select click")
         self.but_8_edit_["state"] = tk.NORMAL
         self.but_9_delete_["state"] = tk.NORMAL
         current_record = self.video_tv_.focus()
         values = self.video_tv_.item(current_record, 'values')
-        print(values)
+        #print(values)
 
+    def fixed_map(self, style, option):
+        return [elm for elm in style.map('Treeview', query_opt=option) if
+            elm[:2] != ('!disabled', '!selected')]
     
 
 if __name__=="__main__":
