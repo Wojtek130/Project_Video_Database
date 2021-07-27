@@ -77,23 +77,16 @@ class View:
         tk.Label(self.add_video_pop_up_, text="Publication date").grid(row=3)
         tk.Label(self.add_video_pop_up_, text="Notes").grid(row=4)
         tk.Label(self.add_video_pop_up_, text="Key Words").grid(row=5)
-
         self.e_episode_no_ = tk.StringVar(value="{}".format(Video.current_video_id_))
         self.e_title_ = tk.StringVar(value="")
         self.e_state_ = tk.StringVar(value="")
         self.e_publication_date_ = tk.StringVar(value="01.01.2000")
         self.e_notes_ = tk.StringVar(value="")
         self.e_key_words_ = tk.StringVar("")
-
         e_episode_no = tk.Entry(self.add_video_pop_up_, textvariable=self.e_episode_no_)
         e_title = tk.Entry(self.add_video_pop_up_, textvariable=self.e_title_)
-        #e_state = tk.Entry(self.add_video_pop_up_, textvariable=self.e_state_)
-        #options_list_2 = ["nic", "nagrane", "obrabiane", "opublikowane"]
-        #value_inside = tk.StringVar()
-        #e_state = tk.OptionMenu(self.add_video_pop_up_, value_inside, *options_list_2, command=self.but_4_sorting_clicked)
         e_state = ttk.Combobox(self.add_video_pop_up_, textvariable=self.e_state_, width = 17, state="readonly")
         e_state['values'] = (' nic', 'nagrane', 'obrabiane', 'opublikowane')
-        #e_state.current(2)
         e_publication_date = tk.Entry(self.add_video_pop_up_, textvariable=self.e_publication_date_)
         e_notes = tk.Entry(self.add_video_pop_up_, textvariable=self.e_notes_)
         e_key_words = tk.Entry(self.add_video_pop_up_, textvariable=self.e_key_words_)
@@ -103,7 +96,6 @@ class View:
         e_publication_date.grid(row=3, column=1)
         e_notes.grid(row=4, column=1)
         e_key_words.grid(row=5, column=1)
-
         self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command=self.but_6_submit_clicked)
         self.but_7_cancel_ = ttk.Button(self.add_video_pop_up_, text="Cancel", command=self.but_7_cancel_clicked)
         self.but_6_submit_.grid(row=6, column=0)
@@ -124,7 +116,14 @@ class View:
         title = self.e_title_.get()
         state = self.e_state_.get()
         publication_date = self.e_publication_date_.get()
-        pub_date = datetime.datetime.strptime(publication_date, "%d.%m.%Y").date() #'24.05.2010'
+        if publication_date == "":
+            pub_date = None
+        else:
+            try: 
+                pub_date = datetime.datetime.strptime(publication_date, "%d.%m.%Y").date() #'24.05.2010'
+            except:
+                pub_date = None
+                #pop window telling about wrong data format
         notes = self.e_notes_.get()
         key_words = self.e_key_words_.get()
         key_words_list = list(set(key_words.split(", ")))
