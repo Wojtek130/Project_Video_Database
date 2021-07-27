@@ -83,7 +83,13 @@ class View:
 
         e_episode_no = tk.Entry(self.add_video_pop_up_, textvariable=self.e_episode_no_)
         e_title = tk.Entry(self.add_video_pop_up_, textvariable=self.e_title_)
-        e_state = tk.Entry(self.add_video_pop_up_, textvariable=self.e_state_)
+        #e_state = tk.Entry(self.add_video_pop_up_, textvariable=self.e_state_)
+        #options_list_2 = ["nic", "nagrane", "obrabiane", "opublikowane"]
+        #value_inside = tk.StringVar()
+        #e_state = tk.OptionMenu(self.add_video_pop_up_, value_inside, *options_list_2, command=self.but_4_sorting_clicked)
+        e_state = ttk.Combobox(self.add_video_pop_up_, textvariable=self.e_state_, width = 17, state="readonly")
+        e_state['values'] = (' nic', 'nagrane', 'obrabiane', 'opublikowane')
+        #e_state.current(2)
         e_publication_date = tk.Entry(self.add_video_pop_up_, textvariable=self.e_publication_date_)
         e_notes = tk.Entry(self.add_video_pop_up_, textvariable=self.e_notes_)
         e_key_words = tk.Entry(self.add_video_pop_up_, textvariable=self.e_key_words_)
@@ -204,8 +210,8 @@ class View:
             button['state'] = tk.NORMAL
 
     def tv_double_click(self, event):
-        curItem = self.video_tv_.focus()
-        values = self.video_tv_.item(curItem, 'values')
+        current_record = self.video_tv_.focus()
+        values = self.video_tv_.item(current_record, 'values')
         print(values)
         #print(self.video_tv_.item(curItem))
     
@@ -224,8 +230,8 @@ class View:
         print("select click")
         self.but_8_edit_["state"] = tk.NORMAL
         self.but_9_delete_["state"] = tk.NORMAL
-        curItem = self.video_tv_.focus()
-        values = self.video_tv_.item(curItem, 'values')
+        current_record = self.video_tv_.focus()
+        values = self.video_tv_.item(current_record, 'values')
         print(values)
 
     
