@@ -13,10 +13,6 @@ class View:
 
     def __init__(self, main_window):
         self.main_window_ = main_window
-        self.style_ = ttk.Style()
-        self.style_.theme_use("clam")
-        self.style_.map('Treeview', foreground=self.fixed_map('foreground'), background=self.fixed_map('background'))     
-        self.style_.configure("Treeview.Heading", font=('Calibri', 10,'bold'), background="#bfbfbf")
         return
 
     def set_up(self):
@@ -142,7 +138,10 @@ class View:
     def arrange_video_tv(self):
         #style = ttk.Style()
         #style.map('Treeview', foreground=self.fixed_map(style, 'foreground'), background=self.fixed_map(style, 'background'))
-        self.video_tv_ = ttk.Treeview(self.bottom_frame_)
+        self.video_tv_scrollbar_ = Scrollbar(self.bottom_frame_)
+        self.video_tv_scrollbar_.pack(side=RIGHT, fill=Y)
+        self.video_tv_ = ttk.Treeview(self.bottom_frame_, yscrollcommand=self.video_tv_scrollbar_)
+        self.video_tv_scrollbar_.config(command=self.video_tv_.yview)
         self.video_tv_['columns']=('Video ID', 'Episode No.', 'Title', 'State', 'Publication date', 'Notes', 'Key words')
         self.video_tv_.column('#0', width=0, stretch=NO)
         self.video_tv_.column('Video ID', anchor=CENTER, width=80)
@@ -165,12 +164,16 @@ class View:
         self.video_tv_.tag_configure('obrabiane', background='red')
         self.video_tv_.tag_configure('opublikowane', background='#7cf536')
         self.video_tv_.pack()
+        
         #self.video_tv_.bind("<Button-1>", self.tv_single_click)
         self.video_tv_.bind("<Double-1>", self.tv_double_click)
         self.video_tv_.bind("<<TreeviewSelect>>", self.tv_select_click)
 
     def arrange_keyword_tv(self):
-        self.keyword_tv_ = ttk.Treeview(self.bottom_frame_)
+        self.keyword_tv_scrollbar_ = Scrollbar(self.bottom_frame_)
+        self.keyword_tv_scrollbar_.pack(side=RIGHT, fill=Y)
+        self.keyword_tv_ = ttk.Treeview(self.bottom_frame_, yscrollcommand=self.keyword_tv_scrollbar_)
+        self.keyword_tv_scrollbar_.config(command=self.keyword_tv_.yview)
         self.keyword_tv_['columns']=('Keyword ID', 'Name', 'Episodes')
         self.keyword_tv_.column('#0', width=0, stretch=NO)
         self.keyword_tv_.column('Keyword ID', anchor=CENTER, width=80)
@@ -193,6 +196,10 @@ class View:
             self.keyword_tv_.insert(parent='', index = i, values=a)
 
     def set_up_layout(self):
+        self.style_ = ttk.Style()
+        self.style_.theme_use("clam")
+        self.style_.map('Treeview', foreground=self.fixed_map('foreground'), background=self.fixed_map('background'))     
+        self.style_.configure("Treeview.Heading", font=('Calibri', 10,'bold'), background="#bfbfbf")
         self.top_frame_.pack(side = TOP)
         self.bottom_frame_.pack (side=BOTTOM)
         self.top_frame_2_.pack(side = TOP)
@@ -223,19 +230,7 @@ class View:
     def tv_double_click(self, event):
         current_record = self.video_tv_.focus()
         values = self.video_tv_.item(current_record, 'values')
-        #print(values)
-        #print(self.video_tv_.item(curItem))
     
-  #  def tv_single_click(self, event):
-   #     print("single click")
-    #    self.but_8_edit_["state"] = tk.NORMAL
-     #
-     #    self.but_9_delete_["state"] = tk.NORMAL
-       # curItem = self.video_tv_.focus()
-        #print(curItem)
-        #values = self.video_tv_.item(curItem, 'values')
-        
-        #print(values)
 
     def tv_select_click(self, event):
         #print("select click")
