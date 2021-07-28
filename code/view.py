@@ -165,7 +165,7 @@ class View:
         self.video_tv_.tag_configure('nagrane', background='#36c5f5')
         self.video_tv_.tag_configure('obrabiane', background='red')
         self.video_tv_.tag_configure('opublikowane', background='#7cf536')
-        self.video_tv_.pack(fill=tk.X)
+        self.video_tv_.pack(fill="both", expand=True)
         
         #self.video_tv_.bind("<Button-1>", self.tv_single_click)
         self.video_tv_.bind("<Double-1>", self.tv_double_click)
@@ -185,7 +185,7 @@ class View:
         self.keyword_tv_.heading('Keyword ID', text='Keyword ID', anchor=CENTER)
         self.keyword_tv_.heading('Name', text='Name', anchor=CENTER)
         self.keyword_tv_.heading('Episodes', text='Episodes', anchor=CENTER)
-        self.keyword_tv_.pack(fill=tk.X)
+        self.keyword_tv_.pack(fill="both", expand=True)
 
     def insert_videos_data(self, videos_information_array):
         for i, a in enumerate(videos_information_array):
@@ -205,7 +205,7 @@ class View:
 
         self.top_frame_.pack(side=TOP, fill=tk.X)
         #self.top_frame_2_.grid(row=1, column=0)
-        self.bottom_frame_.pack(side=TOP, fill=tk.X)
+        self.bottom_frame_.pack(side=TOP, fill="both", expand=True)
 
         #self.top_frame_.pack(side = TOP)
         #self.bottom_frame_.pack (side=BOTTOM)
@@ -217,9 +217,9 @@ class View:
 
     def create_widgets(self):
         self.background_label_ = tk.Label(self.main_window_)
-        self.top_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="yellow",highlightcolor="red",highlightthickness=1)
-        self.bottom_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="green",highlightcolor="red",highlightthickness=1)
-        self.top_frame_2_ = Frame(self.top_frame_, highlightbackground="blue", highlightthickness=1,)        
+        self.top_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="yellow",highlightcolor="yellow",highlightthickness=1)
+        self.bottom_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="green",highlightcolor="green",highlightthickness=1)
+        self.top_frame_2_ = Frame(self.top_frame_, highlightbackground="blue", highlightthickness=1, highlightcolor="blue")        
         self.but_1_show_videos_ = tk.Button(self.top_frame_2_, text = "Videos Table",command = self.but_1_show_videos_clicked)
         self.but_2_show_keywords_ = tk.Button(self.top_frame_2_, text = "Keywords Table",command = self.but_2_show_keywords_clicked)
         self.but_3_add_video_ = tk.Button(self.top_frame_2_, text = "Add Video",command = self.but_3_add_video_clicked)
