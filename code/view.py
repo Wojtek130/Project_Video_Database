@@ -37,7 +37,6 @@ class View:
         self.but_4_sorting_.pack(side=LEFT, expand=True)
         self.but_8_edit_.pack(side=LEFT, expand=True)
         self.but_9_delete_.pack(side=LEFT, expand=True)
-        print("hah")
         self.but_8_edit_['state'] = tk.DISABLED
         self.but_9_delete_['state'] = tk.DISABLED
         self.arrange_video_tv()
@@ -132,6 +131,7 @@ class View:
         self.add_video_pop_up_.destroy()
 
     def but_8_edit_clicked(self):
+        pub.sendMessage("edit_requested", data = self.selected_values_)
         print("Edit clicked")
 
     def but_9_delete_clicked(self):
@@ -166,8 +166,6 @@ class View:
         self.video_tv_.tag_configure('obrabiane', background='red')
         self.video_tv_.tag_configure('opublikowane', background='#7cf536')
         self.video_tv_.pack(fill="both", expand=True)
-        
-        #self.video_tv_.bind("<Button-1>", self.tv_single_click)
         self.video_tv_.bind("<Double-1>", self.tv_double_click)
         self.video_tv_.bind("<<TreeviewSelect>>", self.tv_select_click)
 
@@ -236,15 +234,16 @@ class View:
     def tv_double_click(self, event):
         current_record = self.video_tv_.focus()
         values = self.video_tv_.item(current_record, 'values')
+        print(values)
+        pub.sendMessage("edit_requested", data = values)
     
 
     def tv_select_click(self, event):
-        #print("select click")
+        print("select click")
         self.but_8_edit_["state"] = tk.NORMAL
         self.but_9_delete_["state"] = tk.NORMAL
         current_record = self.video_tv_.focus()
-        values = self.video_tv_.item(current_record, 'values')
-        #print(values)
+        self.selected_values_ = self.video_tv_.item(current_record, 'values')
 
     def fixed_map(self, option):
         return [elm for elm in self.style_.map('Treeview', query_opt=option) if

@@ -32,14 +32,14 @@ Firstly, create Virtual Environment, install the required libraries and activate
 ~~~ bash=
 python3 -m venv venv
 source venv/bin/activate
-python3 -m pip install requirements.txt
+pip3 install -r requirements.txt
 ~~~
 
 #### Windows
 ~~~ bash=
 py -m venv venv
 .\venv\Scripts\activate
-py -m pip install requirements.txt
+pip install -r requirements.txt
 ~~~
 
 ### Start the app

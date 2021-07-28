@@ -154,6 +154,9 @@ class ModelDB(Model):
             max_id = self.c_.fetchone()[0]
             VidKeyWord.set_vid_key_word_id_(int(max_id) + 1)
 
+    def edit_requested(self, data):
+        print("edit model")
+
    
     def __del__(self):
         self.conn_.close()

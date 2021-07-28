@@ -13,3 +13,7 @@ class Model(ABC):
     @abstractmethod
     def add_video(self):
         pass
+
+    @abstractmethod
+    def edit_requested(self):
+        pass
