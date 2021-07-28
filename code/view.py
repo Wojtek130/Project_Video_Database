@@ -23,6 +23,7 @@ class View:
         try:
             self.but_5_sorting_alph_.pack_forget()
             self.keyword_tv_.pack_forget()
+            self.keyword_tv_scrollbar_.pack_forget()
         except AttributeError:
             pass
         self.but_1_show_videos_['state'] = tk.DISABLED
@@ -49,6 +50,7 @@ class View:
             self.video_tv_.pack_forget()
             self.but_8_edit_.pack_forget()
             self.but_9_delete_.pack_forget()
+            self.video_tv_scrollbar_.pack_forget()
         except AttributeError:
             pass
         self.but_1_show_videos_['state'] = tk.NORMAL
@@ -163,7 +165,7 @@ class View:
         self.video_tv_.tag_configure('nagrane', background='#36c5f5')
         self.video_tv_.tag_configure('obrabiane', background='red')
         self.video_tv_.tag_configure('opublikowane', background='#7cf536')
-        self.video_tv_.pack()
+        self.video_tv_.pack(fill=tk.X)
         
         #self.video_tv_.bind("<Button-1>", self.tv_single_click)
         self.video_tv_.bind("<Double-1>", self.tv_double_click)
@@ -176,14 +178,14 @@ class View:
         self.keyword_tv_scrollbar_.config(command=self.keyword_tv_.yview)
         self.keyword_tv_['columns']=('Keyword ID', 'Name', 'Episodes')
         self.keyword_tv_.column('#0', width=0, stretch=NO)
-        self.keyword_tv_.column('Keyword ID', anchor=CENTER, width=80)
-        self.keyword_tv_.column('Name', anchor=CENTER, width=100)
-        self.keyword_tv_.column('Episodes', anchor=CENTER, width=400)
+        self.keyword_tv_.column('Keyword ID', anchor=CENTER)
+        self.keyword_tv_.column('Name', anchor=CENTER)
+        self.keyword_tv_.column('Episodes', anchor=CENTER)
         self.keyword_tv_.heading('#0', text='', anchor=CENTER)
         self.keyword_tv_.heading('Keyword ID', text='Keyword ID', anchor=CENTER)
         self.keyword_tv_.heading('Name', text='Name', anchor=CENTER)
         self.keyword_tv_.heading('Episodes', text='Episodes', anchor=CENTER)
-        self.keyword_tv_.pack()
+        self.keyword_tv_.pack(fill=tk.X)
 
     def insert_videos_data(self, videos_information_array):
         for i, a in enumerate(videos_information_array):
@@ -200,9 +202,14 @@ class View:
         self.style_.theme_use("clam")
         self.style_.map('Treeview', foreground=self.fixed_map('foreground'), background=self.fixed_map('background'))     
         self.style_.configure("Treeview.Heading", font=('Calibri', 10,'bold'), background="#bfbfbf")
-        self.top_frame_.pack(side = TOP)
-        self.bottom_frame_.pack (side=BOTTOM)
-        self.top_frame_2_.pack(side = TOP)
+
+        self.top_frame_.pack(side=TOP, fill=tk.X)
+        #self.top_frame_2_.grid(row=1, column=0)
+        self.bottom_frame_.pack(side=TOP, fill=tk.X)
+
+        #self.top_frame_.pack(side = TOP)
+        #self.bottom_frame_.pack (side=BOTTOM)
+        self.top_frame_2_.pack(side = TOP, fill=tk.X)
         self.but_3_add_video_.pack( side=LEFT)
         self.but_1_show_videos_.pack( side=LEFT)
         self.but_2_show_keywords_.pack( side=LEFT)
@@ -210,10 +217,9 @@ class View:
 
     def create_widgets(self):
         self.background_label_ = tk.Label(self.main_window_)
-        self.top_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="black",highlightcolor="red",highlightthickness=1,width=300, height=600)
-        self.bottom_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="black",highlightcolor="red",highlightthickness=1,width=500, height=600)
-        self.top_frame_2_ = Frame(self.top_frame_)
-        
+        self.top_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="yellow",highlightcolor="red",highlightthickness=1)
+        self.bottom_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="green",highlightcolor="red",highlightthickness=1)
+        self.top_frame_2_ = Frame(self.top_frame_, highlightbackground="blue", highlightthickness=1,)        
         self.but_1_show_videos_ = tk.Button(self.top_frame_2_, text = "Videos Table",command = self.but_1_show_videos_clicked)
         self.but_2_show_keywords_ = tk.Button(self.top_frame_2_, text = "Keywords Table",command = self.but_2_show_keywords_clicked)
         self.but_3_add_video_ = tk.Button(self.top_frame_2_, text = "Add Video",command = self.but_3_add_video_clicked)
@@ -247,9 +253,9 @@ class View:
 
 if __name__=="__main__":
     main_window = tk.Tk()
-    WIDTH = 800
-    HEIGHT = 600
-    main_window.geometry("%sx%s" % (WIDTH, HEIGHT))
+    #WIDTH = 800
+    #HEIGHT = 600
+    #main_window.geometry("%sx%s" % (WIDTH, HEIGHT))
     #main_window.resizable(0, 0)
     main_window.title("Video Database")
     view=View(main_window)
