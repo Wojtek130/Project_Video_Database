@@ -34,9 +34,9 @@ class View:
         self.but_4_sorting_ = tk.OptionMenu(self.top_frame_2_, value_inside, *options_list, command=self.but_4_sorting_clicked)
         self.but_8_edit_ = tk.Button(self.top_frame_2_, text = "Edit",command = self.but_8_edit_clicked)
         self.but_9_delete_ = tk.Button(self.top_frame_2_, text = "Delete",command = self.but_9_delete_clicked)
-        self.but_4_sorting_.pack(side=LEFT)
-        self.but_8_edit_.pack(side=LEFT)
-        self.but_9_delete_.pack(side=LEFT)
+        self.but_4_sorting_.pack(side=LEFT, expand=True)
+        self.but_8_edit_.pack(side=LEFT, expand=True)
+        self.but_9_delete_.pack(side=LEFT, expand=True)
         print("hah")
         self.but_8_edit_['state'] = tk.DISABLED
         self.but_9_delete_['state'] = tk.DISABLED
@@ -60,7 +60,7 @@ class View:
         value_inside.set("Sort by")
         options_list = ["Keywords ID", "Name"]
         self.but_5_sorting_alph_ = tk.OptionMenu(self.top_frame_2_, value_inside, *options_list, command=self.but_5_sorting_clicked)
-        self.but_5_sorting_alph_.pack(side=LEFT)
+        self.but_5_sorting_alph_.pack(side=LEFT, expand=True)
         pub.sendMessage("but_2_show_keywords_clicked", data = "Video ID")
 
 
@@ -210,9 +210,9 @@ class View:
         #self.top_frame_.pack(side = TOP)
         #self.bottom_frame_.pack (side=BOTTOM)
         self.top_frame_2_.pack(side = TOP, fill=tk.X)
-        self.but_3_add_video_.pack( side=LEFT)
-        self.but_1_show_videos_.pack( side=LEFT)
-        self.but_2_show_keywords_.pack( side=LEFT)
+        self.but_3_add_video_.pack( side=LEFT, expand=True)
+        self.but_1_show_videos_.pack( side=LEFT, expand=True)
+        self.but_2_show_keywords_.pack( side=LEFT, expand=True)
         
 
     def create_widgets(self):
