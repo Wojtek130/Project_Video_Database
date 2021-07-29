@@ -8,10 +8,9 @@ from vid_key_word import VidKeyWord
 
 class ModelDB(Model):
     def __init__(self):
-        self.conn_ = sqlite3.connect("database/app_db4.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
-        self.conn_.execute("PRAGMA foreign_keys = 1")
+        self.conn_ = sqlite3.connect("database/app_db3.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        #self.conn_.execute("PRAGMA foreign_keys = 1")
         self.c_ = self.conn_.cursor()
-        
         self.c_.execute(Video.create_table_)
         self.c_.execute(KeyWord.create_table_)
         self.c_.execute(VidKeyWord.create_table_)
@@ -160,9 +159,7 @@ class ModelDB(Model):
         print("edit model")
 
     def delete_requested(self, data):
-        print("delete model")
         vid = data[0]
-
         self.c_.execute("""select kw.keyword_id
                         from Video v, KeyWord kw, VidKeyWord vkw
                         where v.video_id = ? and v.video_id = vkw.video_id and vkw.keyword_id = kw.keyword_id""", (vid,))
@@ -179,6 +176,14 @@ class ModelDB(Model):
         self.c_.execute("""DELETE FROM VidKeyWord WHERE video_id=?""", (vid,))
         self.c_.execute("""DELETE FROM Video WHERE video_id=?""", (vid,))
         self.conn_.commit()
+
+    def get_all_keywords_for_vid(self, vid):
+        self.c_.execute("""select kw.name
+                        from Video v, KeyWord kw, VidKeyWord vkw
+                        where v.video_id = ? and v.video_id = vkw.video_id and vkw.keyword_id = kw.keyword_id""", (vid,))
+        all_keywords_for_vid = self.c_.fetchall()
+        all_keywords_for_vid = list(map(lambda tuple : tuple[0], all_keywords_for_vid))
+        pub.sendMessage("all_keywords_for_vid_ready", data=all_keywords_for_vid)
    
     def __del__(self):
         self.conn_.close()

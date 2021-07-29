@@ -62,9 +62,65 @@ class View:
         self.but_5_sorting_alph_.pack(side=LEFT, expand=True)
         pub.sendMessage("but_2_show_keywords_clicked", data = "Video ID")
 
-
+    def add_edit_pop_up_window(self, action):
+        self.add_video_pop_up_ = tk.Toplevel()
+        #self.add_video_pop_up_.wm_title("Add Video") ###
+        self.add_video_pop_up_.grab_set()
+        tk.Label(self.add_video_pop_up_, text="Episode No.").grid(row=0)
+        tk.Label(self.add_video_pop_up_, text="Title").grid(row=1)
+        tk.Label(self.add_video_pop_up_, text="State").grid(row=2)
+        tk.Label(self.add_video_pop_up_, text="Publication date").grid(row=3)
+        tk.Label(self.add_video_pop_up_, text="Notes").grid(row=4)
+        tk.Label(self.add_video_pop_up_, text="Key Words").grid(row=5)
+        #self.e_episode_no_ = tk.StringVar(value="{}".format(Video.current_video_id_)) ###
+        #self.e_title_ = tk.StringVar(value="") ###
+        #self.e_state_ = tk.StringVar(value="") ###
+        #self.e_publication_date_ = tk.StringVar(value="01.01.2000") ###
+        #self.e_notes_ = tk.StringVar(value="") ###
+        #self.e_key_words_ = tk.StringVar("") ###
+        if action == "add":
+            self.add_video_pop_up_.wm_title("Add Video")
+            self.e_episode_no_ = tk.StringVar(value="{}".format(Video.current_video_id_))
+            self.e_title_ = tk.StringVar(value="")
+            self.e_state_ = tk.StringVar(value="")
+            self.e_publication_date_ = tk.StringVar(value="01.01.2000")
+            self.e_notes_ = tk.StringVar(value="")
+            self.e_key_words_ = tk.StringVar("")
+            self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command=self.but_6_submit_add_clicked)
+        elif action == "edit":
+            self.add_video_pop_up_.wm_title("Edit Video")
+            self.e_episode_no_ = tk.StringVar(value="{}".format(self.selected_values_[1])) ###
+            self.e_title_ = tk.StringVar(value=self.selected_values_[2])
+            self.e_state_ = tk.StringVar(value=self.selected_values_[3]) 
+            self.e_publication_date_ = tk.StringVar(value=self.selected_values_[4])
+            self.e_notes_ = tk.StringVar(value=self.selected_values_[5])
+            
+            #self.e_key_words_ = tk.StringVar(value="aaa, bb")
+            pub.sendMessage("get_all_keywords_for_vid", vid=self.selected_values_[0])
+            print(self.keywords_array_for_vid_)
+            keywords_string =', '.join(self.keywords_array_for_vid_) 
+            self.e_key_words_ = tk.StringVar(value=keywords_string)
+            self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command=self.but_6_submit_add_clicked) ###
+        e_episode_no = tk.Entry(self.add_video_pop_up_, textvariable=self.e_episode_no_)
+        e_title = tk.Entry(self.add_video_pop_up_, textvariable=self.e_title_)
+        e_state = ttk.Combobox(self.add_video_pop_up_, textvariable=self.e_state_, width = 17, state="readonly")
+        e_state['values'] = (' nic', 'nagrane', 'obrabiane', 'opublikowane')
+        e_publication_date = tk.Entry(self.add_video_pop_up_, textvariable=self.e_publication_date_)
+        e_notes = tk.Entry(self.add_video_pop_up_, textvariable=self.e_notes_)
+        e_key_words = tk.Entry(self.add_video_pop_up_, textvariable=self.e_key_words_)
+        e_episode_no.grid(row=0, column=1)
+        e_title.grid(row=1, column=1)
+        e_state.grid(row=2, column=1)
+        e_publication_date.grid(row=3, column=1)
+        e_notes.grid(row=4, column=1)
+        e_key_words.grid(row=5, column=1)
+        self.but_7_cancel_ = ttk.Button(self.add_video_pop_up_, text="Cancel", command=self.but_7_cancel_clicked)
+        self.but_6_submit_.grid(row=6, column=0)
+        self.but_7_cancel_.grid(row=6, column=1)
 
     def but_3_add_video_clicked(self, *args):
+        self.add_edit_pop_up_window("add")
+        """
         self.add_video_pop_up_ = tk.Toplevel()
         self.add_video_pop_up_.wm_title("Add Video")
         self.add_video_pop_up_.grab_set()
@@ -93,10 +149,11 @@ class View:
         e_publication_date.grid(row=3, column=1)
         e_notes.grid(row=4, column=1)
         e_key_words.grid(row=5, column=1)
-        self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command=self.but_6_submit_clicked)
+        self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command=self.but_6_submit_add_clicked)
         self.but_7_cancel_ = ttk.Button(self.add_video_pop_up_, text="Cancel", command=self.but_7_cancel_clicked)
         self.but_6_submit_.grid(row=6, column=0)
         self.but_7_cancel_.grid(row=6, column=1)
+        """
 
     def but_4_sorting_clicked(self, sorting_option):
         for item in self.video_tv_.get_children():
@@ -108,7 +165,7 @@ class View:
             self.keyword_tv_.delete(item)
         pub.sendMessage("but_2_show_keywords_clicked", data=sorting_option)
 
-    def but_6_submit_clicked(self):
+    def but_6_submit_add_clicked(self):
         episode_no = self.e_episode_no_.get()
         title = self.e_title_.get()
         state = self.e_state_.get()
@@ -124,16 +181,18 @@ class View:
         notes = self.e_notes_.get()
         key_words = self.e_key_words_.get()
         key_words_list = list(set(key_words.split(", ")))
-        pub.sendMessage("but_6_submit_clicked", data = (Video(episode_no,title, state, pub_date, notes), key_words_list))
+        pub.sendMessage("but_6_submit_add_clicked", data = (Video(episode_no,title, state, pub_date, notes), key_words_list))
         self.add_video_pop_up_.destroy()
 
     def but_7_cancel_clicked(self):
         self.add_video_pop_up_.destroy()
 
     def but_8_edit_clicked(self):
-        pub.sendMessage("edit_requested", data = self.selected_values_)
         print("Edit clicked")
-
+        print(self.selected_values_)
+        self.add_edit_pop_up_window(action="edit")
+        pub.sendMessage("edit_requested", data = self.selected_values_)
+        
     def but_9_delete_clicked(self):
         pub.sendMessage("delete_requested", data = self.selected_values_)
         print("Delete clicked")
@@ -225,7 +284,6 @@ class View:
         #self.but_8_edit_ = tk.Button(self.top_frame_2_, text = "Edit",command = self.but_8_edit_clicked)
         #self.but_9_delete_ = tk.Button(self.top_frame_2_, text = "Delete",command = self.but_9_delete_clicked)
         
-
     def switch_button_state(self, button):
         if (button['state'] == tk.NORMAL):
             button['state'] = tk.DISABLED
@@ -245,6 +303,9 @@ class View:
         self.but_9_delete_["state"] = tk.NORMAL
         current_record = self.video_tv_.focus()
         self.selected_values_ = self.video_tv_.item(current_record, 'values')
+
+    def all_keywords_for_vid_ready(self, data):
+        self.keywords_array_for_vid_ = data
 
     def fixed_map(self, option):
         return [elm for elm in self.style_.map('Treeview', query_opt=option) if
