@@ -17,3 +17,7 @@ class Model(ABC):
     @abstractmethod
     def edit_requested(self):
         pass
+
+    @abstractmethod
+    def delete_requested(self):
+        pass

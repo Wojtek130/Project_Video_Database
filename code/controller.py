@@ -16,6 +16,7 @@ class Controller:
         pub.subscribe(self.render_keywords_information, "keywords_information_ready")
         pub.subscribe(self.add_video, "but_6_submit_clicked")
         pub.subscribe(self.edit_requested, "edit_requested")
+        pub.subscribe(self.delete_requested, "delete_requested")
         
 
     def get_videos_information(self, data):
@@ -35,6 +36,9 @@ class Controller:
 
     def edit_requested(self, data):
         self.model_.edit_requested(data)
+
+    def delete_requested(self, data):
+        self.model_.delete_requested(data)
 
 
 if __name__ == "__main__":

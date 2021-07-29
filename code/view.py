@@ -135,6 +135,7 @@ class View:
         print("Edit clicked")
 
     def but_9_delete_clicked(self):
+        pub.sendMessage("delete_requested", data = self.selected_values_)
         print("Delete clicked")
 
     def arrange_video_tv(self):
