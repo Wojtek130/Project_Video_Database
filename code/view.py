@@ -86,21 +86,21 @@ class View:
             self.e_publication_date_ = tk.StringVar(value="01.01.2000")
             self.e_notes_ = tk.StringVar(value="")
             self.e_key_words_ = tk.StringVar("")
-            self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command=self.but_6_submit_add_clicked)
+            self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command= lambda: self.but_6_submit_clicked("add"))
         elif action == "edit":
             self.add_video_pop_up_.wm_title("Edit Video")
             self.e_episode_no_ = tk.StringVar(value="{}".format(self.selected_values_[1])) ###
             self.e_title_ = tk.StringVar(value=self.selected_values_[2])
-            self.e_state_ = tk.StringVar(value=self.selected_values_[3]) 
-            self.e_publication_date_ = tk.StringVar(value=self.selected_values_[4])
+            self.e_state_ = tk.StringVar(value=self.selected_values_[3])
+            dot_separated_pub_date = self.selected_values_[4].replace("-", ".")
+            self.e_publication_date_ = tk.StringVar(value=dot_separated_pub_date)
             self.e_notes_ = tk.StringVar(value=self.selected_values_[5])
-            
             #self.e_key_words_ = tk.StringVar(value="aaa, bb")
             pub.sendMessage("get_all_keywords_for_vid", vid=self.selected_values_[0])
             print(self.keywords_array_for_vid_)
             keywords_string =', '.join(self.keywords_array_for_vid_) 
             self.e_key_words_ = tk.StringVar(value=keywords_string)
-            self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command=self.but_6_submit_add_clicked) ###
+            self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command= lambda: self.but_6_submit_clicked("edit"))        
         e_episode_no = tk.Entry(self.add_video_pop_up_, textvariable=self.e_episode_no_)
         e_title = tk.Entry(self.add_video_pop_up_, textvariable=self.e_title_)
         e_state = ttk.Combobox(self.add_video_pop_up_, textvariable=self.e_state_, width = 17, state="readonly")
@@ -165,11 +165,12 @@ class View:
             self.keyword_tv_.delete(item)
         pub.sendMessage("but_2_show_keywords_clicked", data=sorting_option)
 
-    def but_6_submit_add_clicked(self):
+    def but_6_submit_data_tuple(self):
         episode_no = self.e_episode_no_.get()
         title = self.e_title_.get()
         state = self.e_state_.get()
         publication_date = self.e_publication_date_.get()
+        print("daaate: ", publication_date)
         if publication_date == "":
             pub_date = None
         else:
@@ -181,7 +182,23 @@ class View:
         notes = self.e_notes_.get()
         key_words = self.e_key_words_.get()
         key_words_list = list(set(key_words.split(", ")))
-        pub.sendMessage("but_6_submit_add_clicked", data = (Video(episode_no,title, state, pub_date, notes), key_words_list))
+        self.add_video_pop_up_.destroy()
+        return (episode_no, title, state, pub_date, notes, key_words_list)
+    
+    def but_6_submit_clicked(self, action):
+        data_tuple = self.but_6_submit_data_tuple()
+        print("data tuple: ", data_tuple)
+        if action == "add":
+            pub.sendMessage("but_6_submit_add_clicked", data = (Video(data_tuple[0],data_tuple[1], data_tuple[2], data_tuple[3], data_tuple[4]), data_tuple[5]))
+        elif action == "edit":
+            temp2 = list(self.selected_values_)
+            temp2.pop()
+            temp2.append(self.keywords_array_for_vid_)
+            original_video_tuple = tuple(temp2)
+            temp = list(data_tuple)
+            temp.insert(0, original_video_tuple[0][0])
+            data_tuple = tuple(temp)
+            pub.sendMessage("but_6_submit_edit_clicked", data = (original_video_tuple, data_tuple))
         self.add_video_pop_up_.destroy()
 
     def but_7_cancel_clicked(self):
