@@ -64,7 +64,6 @@ class View:
 
     def add_edit_pop_up_window(self, action):
         self.add_video_pop_up_ = tk.Toplevel()
-        #self.add_video_pop_up_.wm_title("Add Video") ###
         self.add_video_pop_up_.grab_set()
         tk.Label(self.add_video_pop_up_, text="Episode No.").grid(row=0)
         tk.Label(self.add_video_pop_up_, text="Title").grid(row=1)
@@ -72,12 +71,6 @@ class View:
         tk.Label(self.add_video_pop_up_, text="Publication date").grid(row=3)
         tk.Label(self.add_video_pop_up_, text="Notes").grid(row=4)
         tk.Label(self.add_video_pop_up_, text="Key Words").grid(row=5)
-        #self.e_episode_no_ = tk.StringVar(value="{}".format(Video.current_video_id_)) ###
-        #self.e_title_ = tk.StringVar(value="") ###
-        #self.e_state_ = tk.StringVar(value="") ###
-        #self.e_publication_date_ = tk.StringVar(value="01.01.2000") ###
-        #self.e_notes_ = tk.StringVar(value="") ###
-        #self.e_key_words_ = tk.StringVar("") ###
         if action == "add":
             self.add_video_pop_up_.wm_title("Add Video")
             self.e_episode_no_ = tk.StringVar(value="{}".format(Video.current_video_id_))
@@ -92,10 +85,10 @@ class View:
             self.e_episode_no_ = tk.StringVar(value="{}".format(self.selected_values_[1])) ###
             self.e_title_ = tk.StringVar(value=self.selected_values_[2])
             self.e_state_ = tk.StringVar(value=self.selected_values_[3])
-            dot_separated_pub_date = self.selected_values_[4].replace("-", ".")
+            dot_separated_pub_date = datetime.datetime.strptime(self.selected_values_[4], "%Y-%m-%d").strftime("%d.%m.%Y")
+            #print("tyyype: ", type(dot_separated_pub_date))
             self.e_publication_date_ = tk.StringVar(value=dot_separated_pub_date)
             self.e_notes_ = tk.StringVar(value=self.selected_values_[5])
-            #self.e_key_words_ = tk.StringVar(value="aaa, bb")
             pub.sendMessage("get_all_keywords_for_vid", vid=self.selected_values_[0])
             print(self.keywords_array_for_vid_)
             keywords_string =', '.join(self.keywords_array_for_vid_) 
@@ -170,12 +163,13 @@ class View:
         title = self.e_title_.get()
         state = self.e_state_.get()
         publication_date = self.e_publication_date_.get()
-        print("daaate: ", publication_date)
         if publication_date == "":
             pub_date = None
         else:
             try: 
                 pub_date = datetime.datetime.strptime(publication_date, "%d.%m.%Y").date() #'24.05.2010'
+                pub_date = pub_date.strftime("%d.%m.%Y")
+                print(pub_date, type(pub_date))
             except:
                 pub_date = None
                 #pop window telling about wrong data format
@@ -187,7 +181,6 @@ class View:
     
     def but_6_submit_clicked(self, action):
         data_tuple = self.but_6_submit_data_tuple()
-        print("data tuple: ", data_tuple)
         if action == "add":
             pub.sendMessage("but_6_submit_add_clicked", data = (Video(data_tuple[0],data_tuple[1], data_tuple[2], data_tuple[3], data_tuple[4]), data_tuple[5]))
         elif action == "edit":
@@ -197,7 +190,11 @@ class View:
             original_video_tuple = tuple(temp2)
             temp = list(data_tuple)
             temp.insert(0, original_video_tuple[0][0])
+            date_converted = datetime.datetime.strptime(original_video_tuple[4], "%Y-%m-%d").strftime("%d.%m.%Y")
+            original_video_tuple = (original_video_tuple[0], original_video_tuple[1], original_video_tuple[2], original_video_tuple[3], date_converted, original_video_tuple[5], original_video_tuple[6])
             data_tuple = tuple(temp)
+            print("original video tuple: ", original_video_tuple)
+            print("data tuple: ", data_tuple)
             pub.sendMessage("but_6_submit_edit_clicked", data = (original_video_tuple, data_tuple))
         self.add_video_pop_up_.destroy()
 
