@@ -185,14 +185,19 @@ class ModelDB(Model):
         self.conn_.commit()
         original_keywords_list = original_data_tuple[6]
         edited_keywords_list = edited_date_tuple[6]
+        print(edited_date_tuple, original_data_tuple)
         for okw in original_keywords_list:
             if okw not in edited_keywords_list:
                 all_videos_for_okw = self.all_objects_query(okw, ALL_VIDEOS_FOR_KW_NAME)
+                kw_id = self.all_objects_query(okw, KWID_FOR_KW_NAME)[0]
                 if len(all_videos_for_okw) == 1:
-                    kw_id = self.all_objects_query(okw, KWID_FOR_KW_NAME)[0]
                     self.c_.execute("""DELETE FROM Keyword WHERE keyword_id=?""", (kw_id,))
-                    self.c_.execute("""DELETE FROM VidKeyword WHERE keyword_id=?""", (kw_id,))
-                    self.conn_.commit()
+                    self.c_.execute("""DELETE FROM VidKeyword WHERE keyword_id=? """, (kw_id,))
+                    print("hello")
+                else:
+                    self.c_.execute("""DELETE FROM VidKeyWord WHERE keyword_id = ? and video_id=? """, (kw_id, original_data_tuple[0]))
+                    print(okw, kw_id, edited_date_tuple[0], "bye")
+                self.conn_.commit()
 
 
 
