@@ -114,8 +114,6 @@ class ModelDB(Model):
     def add_video(self, data):
         video_obj = data[0]
         keywords_list = data[1]
-        print("!!!!!!!!!!!", video_obj.data_tuple())
-        print(type( video_obj.data_tuple()[4]))
         self.c_.execute(Video.insert_replace_, video_obj.data_tuple())
         self.conn_.commit()
         self.c_.execute(self.all_keywords_)
@@ -159,7 +157,6 @@ class ModelDB(Model):
             VidKeyWord.set_vid_key_word_id_(int(max_id) + 1)
 
     def edit_requested(self, data):
-        print("edit model:", data)
         original_data_tuple = data[0]
         edited_date_tuple = data[1]
         dash_separated_date =  datetime.datetime.strptime(edited_date_tuple[4], "%d.%m.%Y").strftime("%Y-%m-%d")

@@ -86,7 +86,6 @@ class View:
             self.e_title_ = tk.StringVar(value=self.selected_values_[2])
             self.e_state_ = tk.StringVar(value=self.selected_values_[3])
             dot_separated_pub_date = datetime.datetime.strptime(self.selected_values_[4], "%Y-%m-%d").strftime("%d.%m.%Y")
-            #print("tyyype: ", type(dot_separated_pub_date))
             self.e_publication_date_ = tk.StringVar(value=dot_separated_pub_date)
             self.e_notes_ = tk.StringVar(value=self.selected_values_[5])
             pub.sendMessage("get_all_keywords_for_vid", vid=self.selected_values_[0])
@@ -113,40 +112,6 @@ class View:
 
     def but_3_add_video_clicked(self, *args):
         self.add_edit_pop_up_window("add")
-        """
-        self.add_video_pop_up_ = tk.Toplevel()
-        self.add_video_pop_up_.wm_title("Add Video")
-        self.add_video_pop_up_.grab_set()
-        tk.Label(self.add_video_pop_up_, text="Episode No.").grid(row=0)
-        tk.Label(self.add_video_pop_up_, text="Title").grid(row=1)
-        tk.Label(self.add_video_pop_up_, text="State").grid(row=2)
-        tk.Label(self.add_video_pop_up_, text="Publication date").grid(row=3)
-        tk.Label(self.add_video_pop_up_, text="Notes").grid(row=4)
-        tk.Label(self.add_video_pop_up_, text="Key Words").grid(row=5)
-        self.e_episode_no_ = tk.StringVar(value="{}".format(Video.current_video_id_))
-        self.e_title_ = tk.StringVar(value="")
-        self.e_state_ = tk.StringVar(value="")
-        self.e_publication_date_ = tk.StringVar(value="01.01.2000")
-        self.e_notes_ = tk.StringVar(value="")
-        self.e_key_words_ = tk.StringVar("")
-        e_episode_no = tk.Entry(self.add_video_pop_up_, textvariable=self.e_episode_no_)
-        e_title = tk.Entry(self.add_video_pop_up_, textvariable=self.e_title_)
-        e_state = ttk.Combobox(self.add_video_pop_up_, textvariable=self.e_state_, width = 17, state="readonly")
-        e_state['values'] = (' nic', 'nagrane', 'obrabiane', 'opublikowane')
-        e_publication_date = tk.Entry(self.add_video_pop_up_, textvariable=self.e_publication_date_)
-        e_notes = tk.Entry(self.add_video_pop_up_, textvariable=self.e_notes_)
-        e_key_words = tk.Entry(self.add_video_pop_up_, textvariable=self.e_key_words_)
-        e_episode_no.grid(row=0, column=1)
-        e_title.grid(row=1, column=1)
-        e_state.grid(row=2, column=1)
-        e_publication_date.grid(row=3, column=1)
-        e_notes.grid(row=4, column=1)
-        e_key_words.grid(row=5, column=1)
-        self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command=self.but_6_submit_add_clicked)
-        self.but_7_cancel_ = ttk.Button(self.add_video_pop_up_, text="Cancel", command=self.but_7_cancel_clicked)
-        self.but_6_submit_.grid(row=6, column=0)
-        self.but_7_cancel_.grid(row=6, column=1)
-        """
 
     def but_4_sorting_clicked(self, sorting_option):
         for item in self.video_tv_.get_children():
@@ -169,7 +134,6 @@ class View:
             try: 
                 pub_date = datetime.datetime.strptime(publication_date, "%d.%m.%Y").date() #'24.05.2010'
                 pub_date = pub_date.strftime("%d.%m.%Y")
-                print(pub_date, type(pub_date))
             except:
                 pub_date = None
                 #pop window telling about wrong data format
@@ -201,7 +165,6 @@ class View:
 
     def but_8_edit_clicked(self):
         print("Edit clicked")
-        print(self.selected_values_)
         self.add_edit_pop_up_window(action="edit")
         #pub.sendMessage("edit_requested", data = self.selected_values_)
         
@@ -305,7 +268,6 @@ class View:
     def tv_double_click(self, event):
         current_record = self.video_tv_.focus()
         values = self.video_tv_.item(current_record, 'values')
-        print(values)
         pub.sendMessage("edit_requested", data = values)
     
 
