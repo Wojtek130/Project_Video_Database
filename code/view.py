@@ -190,11 +190,9 @@ class View:
             original_video_tuple = tuple(temp2)
             temp = list(data_tuple)
             temp.insert(0, original_video_tuple[0][0])
+            data_tuple = tuple(temp)
             date_converted = datetime.datetime.strptime(original_video_tuple[4], "%Y-%m-%d").strftime("%d.%m.%Y")
             original_video_tuple = (original_video_tuple[0], original_video_tuple[1], original_video_tuple[2], original_video_tuple[3], date_converted, original_video_tuple[5], original_video_tuple[6])
-            data_tuple = tuple(temp)
-            print("original video tuple: ", original_video_tuple)
-            print("data tuple: ", data_tuple)
             pub.sendMessage("but_6_submit_edit_clicked", data = (original_video_tuple, data_tuple))
         self.add_video_pop_up_.destroy()
 
@@ -205,7 +203,7 @@ class View:
         print("Edit clicked")
         print(self.selected_values_)
         self.add_edit_pop_up_window(action="edit")
-        pub.sendMessage("edit_requested", data = self.selected_values_)
+        #pub.sendMessage("edit_requested", data = self.selected_values_)
         
     def but_9_delete_clicked(self):
         pub.sendMessage("delete_requested", data = self.selected_values_)

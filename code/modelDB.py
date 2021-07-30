@@ -1,3 +1,4 @@
+import datetime
 import sqlite3
 from pubsub import pub
 
@@ -113,6 +114,8 @@ class ModelDB(Model):
     def add_video(self, data):
         video_obj = data[0]
         keywords_list = data[1]
+        print("!!!!!!!!!!!", video_obj.data_tuple())
+        print(type( video_obj.data_tuple()[4]))
         self.c_.execute(Video.insert_replace_, video_obj.data_tuple())
         self.conn_.commit()
         self.c_.execute(self.all_keywords_)
@@ -156,7 +159,19 @@ class ModelDB(Model):
             VidKeyWord.set_vid_key_word_id_(int(max_id) + 1)
 
     def edit_requested(self, data):
-        print("edit model")
+        print("edit model:", data)
+        original_data_tuple = data[0]
+        edited_date_tuple = data[1]
+        dash_separated_date =  datetime.datetime.strptime(edited_date_tuple[4], "%d.%m.%Y").strftime("%Y-%m-%d")
+        ('video_id', 'episode_number', 'title', 'state', 'publication_date', 'notes')
+        update_query = ''' UPDATE Video
+              SET episode_number = ? ,
+                  title = ? ,
+                  state = ?,
+                  publication_date = ?,
+                  notes = ?
+              WHERE video_id = ?'''
+        self.c_.execute(update_query, (edited_date_tuple[1], edited_date_tuple[2], edited_date_tuple[3], dash_separated_date, edited_date_tuple[5], original_data_tuple[0]))
 
     def delete_requested(self, data):
         vid = data[0]

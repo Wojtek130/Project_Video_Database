@@ -15,7 +15,7 @@ class Controller:
         pub.subscribe(self.get_keywords_information, "but_2_show_keywords_clicked")
         pub.subscribe(self.render_keywords_information, "keywords_information_ready")
         pub.subscribe(self.add_video, "but_6_submit_add_clicked")
-        pub.subscribe(self.edit_requested, "edit_requested")
+        pub.subscribe(self.edit_requested, "but_6_submit_edit_clicked")
         pub.subscribe(self.delete_requested, "delete_requested")
         pub.subscribe(self.get_all_keywords_for_vid, "get_all_keywords_for_vid")
         pub.subscribe(self.all_keywords_for_vid_ready, "all_keywords_for_vid_ready")
