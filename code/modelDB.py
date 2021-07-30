@@ -7,6 +7,19 @@ from model import Model
 from video import Video
 from vid_key_word import VidKeyWord
 
+
+ALL_KEYWORDS_FOR_VID = """select kw.name
+                        from Video v, KeyWord kw, VidKeyWord vkw
+                        where v.video_id = ? and v.video_id = vkw.video_id and vkw.keyword_id = kw.keyword_id"""
+
+ALL_VIDEOS_FOR_KW_NAME = """SELECT v.video_id
+                            FROM Video v, VidKeyWord vkw, KeyWord kw
+                            WHERE kw.name = ? and kw.keyword_id = vkw.keyword_id and vkw.video_id = v.video_id"""
+
+KWID_FOR_KW_NAME = """SELECT kw.keyword_id
+                    from KeyWord kw
+                    WHERE kw.name = ?"""
+
 class ModelDB(Model):
     def __init__(self):
         self.conn_ = sqlite3.connect("database/app_db3.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
@@ -169,6 +182,19 @@ class ModelDB(Model):
                   notes = ?
               WHERE video_id = ?'''
         self.c_.execute(update_query, (edited_date_tuple[1], edited_date_tuple[2], edited_date_tuple[3], dash_separated_date, edited_date_tuple[5], original_data_tuple[0]))
+        self.conn_.commit()
+        original_keywords_list = original_data_tuple[6]
+        edited_keywords_list = edited_date_tuple[6]
+        for okw in original_keywords_list:
+            if okw not in edited_keywords_list:
+                all_videos_for_okw = self.all_objects_query(okw, ALL_VIDEOS_FOR_KW_NAME)
+                if len(all_videos_for_okw) == 1:
+                    kw_id = self.all_objects_query(okw, KWID_FOR_KW_NAME)[0]
+                    self.c_.execute("""DELETE FROM Keyword WHERE keyword_id=?""", (kw_id,))
+                    self.c_.execute("""DELETE FROM VidKeyword WHERE keyword_id=?""", (kw_id,))
+                    self.conn_.commit()
+
+
 
     def delete_requested(self, data):
         vid = data[0]
@@ -189,12 +215,15 @@ class ModelDB(Model):
         self.c_.execute("""DELETE FROM Video WHERE video_id=?""", (vid,))
         self.conn_.commit()
 
-    def get_all_keywords_for_vid(self, vid):
-        self.c_.execute("""select kw.name
-                        from Video v, KeyWord kw, VidKeyWord vkw
-                        where v.video_id = ? and v.video_id = vkw.video_id and vkw.keyword_id = kw.keyword_id""", (vid,))
+    def all_objects_query(self, arg, query):
+        self.c_.execute(query, (arg,))
         all_keywords_for_vid = self.c_.fetchall()
         all_keywords_for_vid = list(map(lambda tuple : tuple[0], all_keywords_for_vid))
+        return all_keywords_for_vid
+
+
+    def get_all_keywords_for_vid(self, vid):
+        all_keywords_for_vid = self.all_objects_query(vid, ALL_KEYWORDS_FOR_VID)
         pub.sendMessage("all_keywords_for_vid_ready", data=all_keywords_for_vid)
    
     def __del__(self):
