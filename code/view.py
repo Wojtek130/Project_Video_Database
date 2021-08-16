@@ -265,9 +265,11 @@ class View:
             button['state'] = tk.NORMAL
 
     def tv_double_click(self, event):
-        current_record = self.video_tv_.focus()
-        values = self.video_tv_.item(current_record, 'values')
-        pub.sendMessage("edit_requested", data = values)
+        print("double click")
+        #current_record = self.video_tv_.focus()
+        #values = self.video_tv_.item(current_record, 'values')
+        self.add_edit_pop_up_window(action="edit")
+        #pub.sendMessage("edit_requested", data = values)
     
 
     def tv_select_click(self, event):
