@@ -178,23 +178,23 @@ class View:
         self.video_tv_scrollbar_.pack(side=RIGHT, fill=Y)
         self.video_tv_ = ttk.Treeview(self.bottom_frame_, yscrollcommand=self.video_tv_scrollbar_)
         self.video_tv_scrollbar_.config(command=self.video_tv_.yview)
-        self.video_tv_['columns']=('Video ID', 'Episode No.', 'Title', 'Status', 'Publication date', 'Notes', 'Key words')
+        self.video_tv_['columns']=('Video ID', 'Episode No.', 'Title', 'Key words', 'Status', 'Publication date', 'Notes')
         self.video_tv_.column('#0', width=0, stretch=NO)
         self.video_tv_.column('Video ID', anchor=CENTER, width=80)
         self.video_tv_.column('Episode No.', anchor=CENTER, width=80)
         self.video_tv_.column('Title', anchor=CENTER, width=80)
+        self.video_tv_.column('Key words', anchor=CENTER, width=250)
         self.video_tv_.column('Status', anchor=CENTER, width=80)
         self.video_tv_.column('Publication date', anchor=CENTER, width=100)
         self.video_tv_.column('Notes', anchor=CENTER, width=80)
-        self.video_tv_.column('Key words', anchor=CENTER, width=250)
         self.video_tv_.heading('#0', text='', anchor=CENTER)
         self.video_tv_.heading('Video ID', text='Video ID', anchor=CENTER)
         self.video_tv_.heading('Episode No.', text='Episode No.', anchor=CENTER)
         self.video_tv_.heading('Title', text='Title', anchor=CENTER)
+        self.video_tv_.heading('Key words', text='Key words', anchor=CENTER)
         self.video_tv_.heading('Status', text='Status', anchor=CENTER)
         self.video_tv_.heading('Publication date', text='Publication date', anchor=CENTER)
         self.video_tv_.heading('Notes', text='Notes', anchor=CENTER)
-        self.video_tv_.heading('Key words', text='Key words', anchor=CENTER)
         self.video_tv_.tag_configure('nic', background='white')
         self.video_tv_.tag_configure('nagrane', background='#36c5f5')
         self.video_tv_.tag_configure('obrabiane', background='red')
@@ -220,8 +220,12 @@ class View:
         self.keyword_tv_.pack(fill="both", expand=True)
 
     def insert_videos_data(self, videos_information_array):
+        print("via: ", videos_information_array)
         for i, a in enumerate(videos_information_array):
             status_tag = a[3]
+            kws = a[-1]
+            a.pop()
+            a.insert(3, kws)
             self.video_tv_.insert(parent='', index = i, values=a, tags=(status_tag,))
         
 
@@ -234,11 +238,9 @@ class View:
         self.style_.theme_use("clam")
         self.style_.map('Treeview', foreground=self.fixed_map('foreground'), background=self.fixed_map('background'))     
         self.style_.configure("Treeview.Heading", font=('Calibri', 10,'bold'), background="#bfbfbf")
-
         self.top_frame_.pack(side=TOP, fill=tk.X)
         #self.top_frame_2_.grid(row=1, column=0)
         self.bottom_frame_.pack(side=TOP, fill="both", expand=True)
-
         #self.top_frame_.pack(side = TOP)
         #self.bottom_frame_.pack (side=BOTTOM)
         self.top_frame_2_.pack(side = TOP, fill=tk.X)
