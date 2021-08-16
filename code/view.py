@@ -146,7 +146,8 @@ class View:
     def but_6_submit_clicked(self, action):
         data_tuple = self.but_6_submit_data_tuple()
         if action == "add":
-            pub.sendMessage("but_6_submit_add_clicked", data = (Video(data_tuple[0],data_tuple[1], data_tuple[2], data_tuple[3], data_tuple[4]), data_tuple[5]))
+            date_converted = datetime.datetime.strptime(data_tuple[3], "%d.%m.%Y").strftime("%Y-%m-%d")
+            pub.sendMessage("but_6_submit_add_clicked", data = (Video(data_tuple[0],data_tuple[1], data_tuple[2], date_converted, data_tuple[4]), data_tuple[5]))
         elif action == "edit":
             temp2 = list(self.selected_values_)
             temp2.pop()
@@ -159,7 +160,6 @@ class View:
             original_video_tuple = (original_video_tuple[0], original_video_tuple[1], original_video_tuple[2], original_video_tuple[3], date_converted, original_video_tuple[5], original_video_tuple[6])
             pub.sendMessage("but_6_submit_edit_clicked", data = (original_video_tuple, data_tuple))
         self.add_video_pop_up_.destroy()
-
     def but_7_cancel_clicked(self):
         self.add_video_pop_up_.destroy()
 

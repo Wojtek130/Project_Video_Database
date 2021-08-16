@@ -88,6 +88,7 @@ class ModelDB(Model):
                 print("Values of diffrent type cannot be sorted")
         else:
             pass
+        print("vid with keywords: ", videos_with_keywords)
         return videos_with_keywords
 
     def get_videos_information(self, sorting_option = "Video ID"):
@@ -132,7 +133,9 @@ class ModelDB(Model):
         self.c_.execute(self.all_keywords_)
         all_keywords = self.c_.fetchall()
         all_keywords =  list(map(lambda tuple : tuple[0], all_keywords))
+        
         for kw in keywords_list:
+            print("kw!!: ", kw)
             if kw not in all_keywords:
                 new_kw = KeyWord(kw)
                 kw_id = new_kw.keyword_id_
@@ -144,6 +147,9 @@ class ModelDB(Model):
             new_vkw = VidKeyWord(video_obj.video_id_, kw_id)
             self.c_.execute(VidKeyWord.insert_replace_, new_vkw.data_tuple())
             self.conn_.commit()
+
+    ###def add_keyword(self, kw_nam):
+       ### return super().add_video()
 
     def set_current_video_id(self):
         self.c_.execute("""SELECT COUNT(*) FROM Video """)
@@ -198,6 +204,20 @@ class ModelDB(Model):
                     self.c_.execute("""DELETE FROM VidKeyWord WHERE keyword_id = ? and video_id=? """, (kw_id, original_data_tuple[0]))
                     print(okw, kw_id, edited_date_tuple[0], "bye")
                 self.conn_.commit()
+        #for ekw in edited_keywords_list:
+         #   if ekw not in original_keywords_list:
+          #      all_videos_for_ekw = self.all_objects_query(ekw, ALL_VIDEOS_FOR_KW_NAME)
+           #
+           #      if len(all_videos_for_ekw) == 0:
+             #       kw = KeyWord(kw)
+              
+              #      kw_id = new_kw.keyword_id_
+               
+               #     self.c_.execute(KeyWord.insert_replace_, new_kw.data_tuple())
+                #    self.conn_.commit()
+                 #   new_vkw = VidKeyWord(video_obj.video_id_, kw_id)
+
+
 
 
 
