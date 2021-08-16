@@ -68,12 +68,12 @@ class ModelDB(Model):
             videos_with_keywords.append(v_list)
         if sorting_option == "Episode No.":
             try:
-                videos_with_keywords.sort(key=lambda x:x[1])
+                videos_with_keywords.sort(key=lambda x:x[1].lower())
             except TypeError:
                 print("Values of diffrent type cannot be sorted")
         elif sorting_option == "Title":
             try:
-                videos_with_keywords.sort(key=lambda x:x[2])
+                videos_with_keywords.sort(key=lambda x:x[2].lower())
             except TypeError:
                 print("Values of diffrent type cannot be sorted")
         elif sorting_option == "State":
@@ -113,7 +113,7 @@ class ModelDB(Model):
                 print("Values of diffrent type cannot be sorted")
         elif sorting_option == "Name":
             try:
-                keywords_with_titles.sort(key=lambda x:x[1])
+                keywords_with_titles.sort(key=lambda x:x[1].lower())
             except TypeError:
                 print("Values of diffrent type cannot be sorted")
         else:
