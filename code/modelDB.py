@@ -176,6 +176,7 @@ class ModelDB(Model):
     def edit_requested(self, data):
         original_data_tuple = data[0]
         edited_date_tuple = data[1]
+        
         dash_separated_date =  datetime.datetime.strptime(edited_date_tuple[4], "%d.%m.%Y").strftime("%Y-%m-%d")
         ('video_id', 'episode_number', 'title', 'state', 'publication_date', 'notes')
         update_query = ''' UPDATE Video

@@ -153,7 +153,7 @@ class View:
             temp2.append(self.keywords_array_for_vid_)
             original_video_tuple = tuple(temp2)
             temp = list(data_tuple)
-            temp.insert(0, original_video_tuple[0][0])
+            temp.insert(0, original_video_tuple[0])
             data_tuple = tuple(temp)
             date_converted = datetime.datetime.strptime(original_video_tuple[4], "%Y-%m-%d").strftime("%d.%m.%Y")
             original_video_tuple = (original_video_tuple[0], original_video_tuple[1], original_video_tuple[2], original_video_tuple[3], date_converted, original_video_tuple[5], original_video_tuple[6])
