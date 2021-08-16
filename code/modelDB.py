@@ -1,6 +1,7 @@
 import datetime
 import sqlite3
 from pubsub import pub
+from tkinter import messagebox
 
 from key_word import KeyWord
 from model import Model
@@ -68,27 +69,30 @@ class ModelDB(Model):
             videos_with_keywords.append(v_list)
         if sorting_option == "Episode No.":
             try:
-                videos_with_keywords.sort(key=lambda x:x[1].lower())
+                videos_with_keywords.sort(key=lambda x:x[1])
             except TypeError:
-                print("Values of diffrent type cannot be sorted")
+                self.sorting_type_error_pop_up()
         elif sorting_option == "Title":
             try:
                 videos_with_keywords.sort(key=lambda x:x[2].lower())
             except TypeError:
-                print("Values of diffrent type cannot be sorted")
+                self.sorting_type_error_pop_up()
         elif sorting_option == "State":
             try:
                 videos_with_keywords.sort(key=lambda x:x[3])
             except TypeError:
-                print("Values of diffrent type cannot be sorted")
+                self.sorting_type_error_pop_up()
         elif sorting_option == "Publication date":
             try:
                 videos_with_keywords.sort(key=lambda x:x[4])
             except TypeError:
-                print("Values of diffrent type cannot be sorted")
+                self.sorting_type_error_pop_up()
         else:
             pass
         return videos_with_keywords
+
+    def sorting_type_error_pop_up(self):
+        messagebox.showwarning(title="Sorting error", message="Values of diffrent type cannot be sorted")
 
     def get_videos_information(self, sorting_option = "Video ID"):
         pub.sendMessage("videos_information_ready", data = self.videos_data_array(sorting_option))
@@ -110,12 +114,12 @@ class ModelDB(Model):
             try:
                 keywords_with_titles.sort(key=lambda x:x[0])
             except TypeError:
-                print("Values of diffrent type cannot be sorted")
+                self.sorting_type_error_pop_up()
         elif sorting_option == "Name":
             try:
                 keywords_with_titles.sort(key=lambda x:x[1].lower())
             except TypeError:
-                print("Values of diffrent type cannot be sorted")
+                self.sorting_type_error_pop_up()
         else:
             pass
         return keywords_with_titles
@@ -176,7 +180,6 @@ class ModelDB(Model):
     def edit_requested(self, data):
         original_data_tuple = data[0]
         edited_date_tuple = data[1]
-        
         dash_separated_date =  datetime.datetime.strptime(edited_date_tuple[4], "%d.%m.%Y").strftime("%Y-%m-%d")
         ('video_id', 'episode_number', 'title', 'state', 'publication_date', 'notes')
         update_query = ''' UPDATE Video
