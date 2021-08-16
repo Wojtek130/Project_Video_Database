@@ -130,10 +130,10 @@ class ModelDB(Model):
         keywords_list = data[1]
         self.c_.execute(Video.insert_replace_, video_obj.data_tuple())
         self.conn_.commit()
+        """
         self.c_.execute(self.all_keywords_)
         all_keywords = self.c_.fetchall()
-        all_keywords =  list(map(lambda tuple : tuple[0], all_keywords))
-        
+        all_keywords =  list(map(lambda tuple : tuple[0], all_keywords))    
         for kw in keywords_list:
             if kw not in all_keywords:
                 new_kw = KeyWord(kw)
@@ -145,10 +145,27 @@ class ModelDB(Model):
                 kw_id = self.c_.fetchone()[0]
             new_vkw = VidKeyWord(video_obj.video_id_, kw_id)
             self.c_.execute(VidKeyWord.insert_replace_, new_vkw.data_tuple())
-            self.conn_.commit()
 
-    ###def add_keyword(self, kw_nam):
-       ### return super().add_video()
+            self.conn_.commit()"""
+        for kw in keywords_list:
+            self.add_keyword(kw, video_obj.video_id_)
+
+    def add_keyword(self, kw_name, vid_id):
+        self.c_.execute(self.all_keywords_)
+        all_keywords = self.c_.fetchall()
+        all_keywords =  list(map(lambda tuple : tuple[0], all_keywords))    
+        if kw_name not in all_keywords:
+            new_kw = KeyWord(kw_name)
+            kw_id = new_kw.keyword_id_
+            self.c_.execute(KeyWord.insert_replace_, new_kw.data_tuple())
+            self.conn_.commit()  
+        else:
+            self.c_.execute(self.keyword_id_for_name_, (kw_name,))
+            kw_id = self.c_.fetchone()[0]
+        new_vkw = VidKeyWord(vid_id, kw_id)
+        self.c_.execute(VidKeyWord.insert_replace_, new_vkw.data_tuple())
+        self.conn_.commit()
+        
 
     def set_current_video_id(self):
         self.c_.execute("""SELECT COUNT(*) FROM Video """)
@@ -200,18 +217,19 @@ class ModelDB(Model):
                 else:
                     self.c_.execute("""DELETE FROM VidKeyWord WHERE keyword_id = ? and video_id=? """, (kw_id, original_data_tuple[0]))
                 self.conn_.commit()
-        #for ekw in edited_keywords_list:
-         #   if ekw not in original_keywords_list:
-          #      all_videos_for_ekw = self.all_objects_query(ekw, ALL_VIDEOS_FOR_KW_NAME)
-           #
-           #      if len(all_videos_for_ekw) == 0:
-             #       kw = KeyWord(kw)
-              
-              #      kw_id = new_kw.keyword_id_
-               
-               #     self.c_.execute(KeyWord.insert_replace_, new_kw.data_tuple())
-                #    self.conn_.commit()
-                 #   new_vkw = VidKeyWord(video_obj.video_id_, kw_id)
+        for ekw in edited_keywords_list:
+            if ekw not in original_keywords_list:
+                """all_videos_for_ekw = self.all_objects_query(ekw, ALL_VIDEOS_FOR_KW_NAME)
+                print("RES: ", all_videos_for_ekw)
+                if len(all_videos_for_ekw) == 0:
+                    new_kw = KeyWord(ekw)
+                    kw_id = new_kw.keyword_id_
+                    self.c_.execute(KeyWord.insert_replace_, new_kw.data_tuple())
+                    self.conn_.commit()
+                    new_vkw = VidKeyWord(original_data_tuple[0], kw_id)
+                    self.c_.execute(VidKeyWord.insert_replace_, new_vkw.data_tuple())
+                    self.conn_.commit()"""
+                self.add_keyword(ekw, original_data_tuple[0])
 
 
 
