@@ -97,9 +97,9 @@ class TestDB(unittest.TestCase):
         print('test_episode_no')
         self.assertEqual(self.record[2], self.vid_1.title_)
 
-    def test_state(self):
-        print('test_state')
-        self.assertEqual(self.record[3], self.vid_1.state_)
+    def test_status(self):
+        print('test_status')
+        self.assertEqual(self.record[3], self.vid_1.status_)
 
     def test_pub_date(self):
         print('test_pub_date')

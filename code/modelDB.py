@@ -23,7 +23,7 @@ KWID_FOR_KW_NAME = """SELECT kw.keyword_id
 
 class ModelDB(Model):
     def __init__(self):
-        self.conn_ = sqlite3.connect("database/app_db3.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        self.conn_ = sqlite3.connect("database/app_db5.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
         #self.conn_.execute("PRAGMA foreign_keys = 1")
         self.c_ = self.conn_.cursor()
         self.c_.execute(Video.create_table_)
@@ -77,7 +77,7 @@ class ModelDB(Model):
                 videos_with_keywords.sort(key=lambda x:x[2].lower())
             except TypeError:
                 self.sorting_type_error_pop_up()
-        elif sorting_option == "State":
+        elif sorting_option == "Status":
             try:
                 videos_with_keywords.sort(key=lambda x:x[3])
             except TypeError:
@@ -181,11 +181,11 @@ class ModelDB(Model):
         original_data_tuple = data[0]
         edited_date_tuple = data[1]
         dash_separated_date =  datetime.datetime.strptime(edited_date_tuple[4], "%d.%m.%Y").strftime("%Y-%m-%d")
-        ('video_id', 'episode_number', 'title', 'state', 'publication_date', 'notes')
+        ('video_id', 'episode_number', 'title', 'status', 'publication_date', 'notes')
         update_query = ''' UPDATE Video
               SET episode_number = ? ,
                   title = ? ,
-                  state = ?,
+                  status = ?,
                   publication_date = ?,
                   notes = ?
               WHERE video_id = ?'''

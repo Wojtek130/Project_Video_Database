@@ -30,7 +30,7 @@ class View:
         self.but_2_show_keywords_['state'] = tk.NORMAL
         value_inside = tk.StringVar(self.top_frame_2_)
         value_inside.set("Sort by")
-        options_list = ["Video ID", "Episode No.", "Title", "State","Publication date"]
+        options_list = ["Video ID", "Episode No.", "Title", "Status","Publication date"]
         self.but_4_sorting_ = tk.OptionMenu(self.top_frame_2_, value_inside, *options_list, command=self.but_4_sorting_clicked)
         self.but_8_edit_ = tk.Button(self.top_frame_2_, text = "Edit",command = self.but_8_edit_clicked)
         self.but_9_delete_ = tk.Button(self.top_frame_2_, text = "Delete",command = self.but_9_delete_clicked)
@@ -67,7 +67,7 @@ class View:
         self.add_video_pop_up_.grab_set()
         tk.Label(self.add_video_pop_up_, text="Episode No.").grid(row=0)
         tk.Label(self.add_video_pop_up_, text="Title").grid(row=1)
-        tk.Label(self.add_video_pop_up_, text="State").grid(row=2)
+        tk.Label(self.add_video_pop_up_, text="Status").grid(row=2)
         tk.Label(self.add_video_pop_up_, text="Publication date").grid(row=3)
         tk.Label(self.add_video_pop_up_, text="Notes").grid(row=4)
         tk.Label(self.add_video_pop_up_, text="Key Words").grid(row=5)
@@ -75,7 +75,7 @@ class View:
             self.add_video_pop_up_.wm_title("Add Video")
             self.e_episode_no_ = tk.StringVar(value="{}".format(Video.current_video_id_))
             self.e_title_ = tk.StringVar(value="")
-            self.e_state_ = tk.StringVar(value="nic")
+            self.e_status_ = tk.StringVar(value="nic")
             self.e_publication_date_ = tk.StringVar(value="01.01.2000")
             self.e_notes_ = tk.StringVar(value="")
             self.e_key_words_ = tk.StringVar("")
@@ -84,7 +84,7 @@ class View:
             self.add_video_pop_up_.wm_title("Edit Video")
             self.e_episode_no_ = tk.StringVar(value="{}".format(self.selected_values_[1])) ###
             self.e_title_ = tk.StringVar(value=self.selected_values_[2])
-            self.e_state_ = tk.StringVar(value=self.selected_values_[3])
+            self.e_status_ = tk.StringVar(value=self.selected_values_[3])
             dot_separated_pub_date = datetime.datetime.strptime(self.selected_values_[4], "%Y-%m-%d").strftime("%d.%m.%Y")
             self.e_publication_date_ = tk.StringVar(value=dot_separated_pub_date)
             self.e_notes_ = tk.StringVar(value=self.selected_values_[5])
@@ -94,14 +94,14 @@ class View:
             self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command= lambda: self.but_6_submit_clicked("edit"))        
         e_episode_no = tk.Entry(self.add_video_pop_up_, textvariable=self.e_episode_no_)
         e_title = tk.Entry(self.add_video_pop_up_, textvariable=self.e_title_)
-        e_state = ttk.Combobox(self.add_video_pop_up_, textvariable=self.e_state_, width = 17, state="readonly")
-        e_state['values'] = (' nic', 'nagrane', 'obrabiane', 'opublikowane')
+        e_status = ttk.Combobox(self.add_video_pop_up_, textvariable=self.e_status_, width = 17, state="readonly")
+        e_status['values'] = (' nic', 'nagrane', 'obrabiane', 'opublikowane')
         e_publication_date = tk.Entry(self.add_video_pop_up_, textvariable=self.e_publication_date_)
         e_notes = tk.Entry(self.add_video_pop_up_, textvariable=self.e_notes_)
         e_key_words = tk.Entry(self.add_video_pop_up_, textvariable=self.e_key_words_)
         e_episode_no.grid(row=0, column=1)
         e_title.grid(row=1, column=1)
-        e_state.grid(row=2, column=1)
+        e_status.grid(row=2, column=1)
         e_publication_date.grid(row=3, column=1)
         e_notes.grid(row=4, column=1)
         e_key_words.grid(row=5, column=1)
@@ -125,7 +125,7 @@ class View:
     def but_6_submit_data_tuple(self):
         episode_no = self.e_episode_no_.get()
         title = self.e_title_.get()
-        state = self.e_state_.get()
+        status = self.e_status_.get()
         publication_date = self.e_publication_date_.get()
         if publication_date == "":
             pub_date = None
@@ -140,7 +140,7 @@ class View:
         key_words = self.e_key_words_.get()
         key_words_list = list(set(key_words.split(", ")))
         self.add_video_pop_up_.destroy()
-        return (episode_no, title, state, pub_date, notes, key_words_list)
+        return (episode_no, title, status, pub_date, notes, key_words_list)
     
     def but_6_submit_clicked(self, action):
         data_tuple = self.but_6_submit_data_tuple()
@@ -178,12 +178,12 @@ class View:
         self.video_tv_scrollbar_.pack(side=RIGHT, fill=Y)
         self.video_tv_ = ttk.Treeview(self.bottom_frame_, yscrollcommand=self.video_tv_scrollbar_)
         self.video_tv_scrollbar_.config(command=self.video_tv_.yview)
-        self.video_tv_['columns']=('Video ID', 'Episode No.', 'Title', 'State', 'Publication date', 'Notes', 'Key words')
+        self.video_tv_['columns']=('Video ID', 'Episode No.', 'Title', 'Status', 'Publication date', 'Notes', 'Key words')
         self.video_tv_.column('#0', width=0, stretch=NO)
         self.video_tv_.column('Video ID', anchor=CENTER, width=80)
         self.video_tv_.column('Episode No.', anchor=CENTER, width=80)
         self.video_tv_.column('Title', anchor=CENTER, width=80)
-        self.video_tv_.column('State', anchor=CENTER, width=80)
+        self.video_tv_.column('Status', anchor=CENTER, width=80)
         self.video_tv_.column('Publication date', anchor=CENTER, width=100)
         self.video_tv_.column('Notes', anchor=CENTER, width=80)
         self.video_tv_.column('Key words', anchor=CENTER, width=250)
@@ -191,7 +191,7 @@ class View:
         self.video_tv_.heading('Video ID', text='Video ID', anchor=CENTER)
         self.video_tv_.heading('Episode No.', text='Episode No.', anchor=CENTER)
         self.video_tv_.heading('Title', text='Title', anchor=CENTER)
-        self.video_tv_.heading('State', text='State', anchor=CENTER)
+        self.video_tv_.heading('Status', text='Status', anchor=CENTER)
         self.video_tv_.heading('Publication date', text='Publication date', anchor=CENTER)
         self.video_tv_.heading('Notes', text='Notes', anchor=CENTER)
         self.video_tv_.heading('Key words', text='Key words', anchor=CENTER)
@@ -221,8 +221,8 @@ class View:
 
     def insert_videos_data(self, videos_information_array):
         for i, a in enumerate(videos_information_array):
-            state_tag = a[3]
-            self.video_tv_.insert(parent='', index = i, values=a, tags=(state_tag,))
+            status_tag = a[3]
+            self.video_tv_.insert(parent='', index = i, values=a, tags=(status_tag,))
         
 
     def insert_keywords_data(self, keywords_information_array):
