@@ -175,8 +175,13 @@ class View:
         #pub.sendMessage("edit_requested", data = self.selected_values_)
         
     def but_9_delete_clicked(self):
-        pub.sendMessage("delete_requested", data = self.selected_values_)
         print("Delete clicked")
+        delete_confimation = tk.messagebox.askquestion ('Delete','Are you sure you want to delete the selected record',icon = 'warning')
+        if delete_confimation == 'yes':
+            pub.sendMessage("delete_requested", data = self.selected_values_)
+        else:
+            pass
+        
 
     def arrange_video_tv(self):
         #style = ttk.Style()
