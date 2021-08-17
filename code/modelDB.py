@@ -24,7 +24,6 @@ KWID_FOR_KW_NAME = """SELECT kw.keyword_id
 class ModelDB(Model):
     def __init__(self):
         self.conn_ = sqlite3.connect("database/app_db5.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
-        #self.conn_.execute("PRAGMA foreign_keys = 1")
         self.c_ = self.conn_.cursor()
         self.c_.execute(Video.create_table_)
         self.c_.execute(KeyWord.create_table_)

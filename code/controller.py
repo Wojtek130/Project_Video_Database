@@ -52,9 +52,6 @@ if __name__ == "__main__":
     WIDTH = 800
     HEIGHT = 800
     main_window.geometry("%sx%s" % (WIDTH, HEIGHT))
-    #mainwin.resizable(0, 0)
     main_window.title("Video Database")
-
     game_app = Controller(main_window)
-
     main_window.mainloop()

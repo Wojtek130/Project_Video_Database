@@ -84,7 +84,6 @@ class View:
             self.e_key_words_ = tk.StringVar("")
             self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command= lambda: self.but_6_submit_clicked("add"))
         elif action == "edit":
-            print("sel val: ", self.selected_values_)
             self.add_video_pop_up_.wm_title("Edit Video")
             self.e_episode_no_ = tk.StringVar(value="{}".format(self.selected_values_[1])) ###
             self.e_title_ = tk.StringVar(value=self.selected_values_[2])
@@ -170,12 +169,11 @@ class View:
         self.add_video_pop_up_.destroy()
 
     def but_8_edit_clicked(self):
-        print("Edit clicked")
+        #print("Edit clicked")
         self.add_edit_pop_up_window(action="edit")
-        #pub.sendMessage("edit_requested", data = self.selected_values_)
         
     def but_9_delete_clicked(self):
-        print("Delete clicked")
+        #print("Delete clicked")
         delete_confimation = tk.messagebox.askquestion ('Delete','Are you sure you want to delete the selected record',icon = 'warning')
         if delete_confimation == 'yes':
             pub.sendMessage("delete_requested", data = self.selected_values_)
@@ -184,8 +182,6 @@ class View:
         
 
     def arrange_video_tv(self):
-        #style = ttk.Style()
-        #style.map('Treeview', foreground=self.fixed_map(style, 'foreground'), background=self.fixed_map(style, 'background'))
         self.video_tv_scrollbar_ = Scrollbar(self.bottom_frame_)
         self.video_tv_scrollbar_.pack(side=RIGHT, fill=Y)
         self.video_tv_ = ttk.Treeview(self.bottom_frame_, yscrollcommand=self.video_tv_scrollbar_)
@@ -232,7 +228,6 @@ class View:
         self.keyword_tv_.pack(fill="both", expand=True)
 
     def insert_videos_data(self, videos_information_array):
-        print("via: ", videos_information_array)
         for i, a in enumerate(videos_information_array):
             status_tag = a[3]
             kws = a[-1]
@@ -252,10 +247,7 @@ class View:
         self.style_.map('Treeview', foreground=self.fixed_map('foreground'), background=self.fixed_map('background'))     
         self.style_.configure("Treeview.Heading", font=('Calibri', 10,'bold'), background="#bfbfbf")
         self.top_frame_.pack(side=TOP, fill=tk.X)
-        #self.top_frame_2_.grid(row=1, column=0)
         self.bottom_frame_.pack(side=TOP, fill="both", expand=True)
-        #self.top_frame_.pack(side = TOP)
-        #self.bottom_frame_.pack (side=BOTTOM)
         self.top_frame_2_.pack(side = TOP, fill=tk.X)
         self.but_3_add_video_.pack( side=LEFT, expand=True)
         self.but_1_show_videos_.pack( side=LEFT, expand=True)
@@ -270,8 +262,6 @@ class View:
         self.but_1_show_videos_ = tk.Button(self.top_frame_2_, text = "Videos Table",command = self.but_1_show_videos_clicked)
         self.but_2_show_keywords_ = tk.Button(self.top_frame_2_, text = "Keywords Table",command = self.but_2_show_keywords_clicked)
         self.but_3_add_video_ = tk.Button(self.top_frame_2_, text = "Add Video",command = self.but_3_add_video_clicked)
-        #self.but_8_edit_ = tk.Button(self.top_frame_2_, text = "Edit",command = self.but_8_edit_clicked)
-        #self.but_9_delete_ = tk.Button(self.top_frame_2_, text = "Delete",command = self.but_9_delete_clicked)
         
     def switch_button_state(self, button):
         if (button['state'] == tk.NORMAL):
@@ -280,15 +270,12 @@ class View:
             button['state'] = tk.NORMAL
 
     def tv_double_click(self, event):
-        print("double click")
-        #current_record = self.video_tv_.focus()
-        #values = self.video_tv_.item(current_record, 'values')
+        #print("double click")
         self.add_edit_pop_up_window(action="edit")
-        #pub.sendMessage("edit_requested", data = values)
     
 
     def tv_select_click(self, event):
-        print("select click")
+        #print("select click")
         self.but_8_edit_["state"] = tk.NORMAL
         self.but_9_delete_["state"] = tk.NORMAL
         current_record = self.video_tv_.focus()
