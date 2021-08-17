@@ -3,6 +3,7 @@ from pubsub import pub
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 from video import Video
 
@@ -73,14 +74,17 @@ class View:
         tk.Label(self.add_video_pop_up_, text="Key Words").grid(row=5)
         if action == "add":
             self.add_video_pop_up_.wm_title("Add Video")
-            self.e_episode_no_ = tk.StringVar(value="{}".format(Video.current_video_id_))
+            self.e_episode_no_ = tk.StringVar(value="{:03d}".format(Video.current_video_id_))
             self.e_title_ = tk.StringVar(value="")
             self.e_status_ = tk.StringVar(value="nic")
-            self.e_publication_date_ = tk.StringVar(value="01.01.2000")
+            date_today = datetime.date.today()
+            date_today_formatted = date_today.strftime("%d.%m.%Y")
+            self.e_publication_date_ = tk.StringVar(value=date_today_formatted)
             self.e_notes_ = tk.StringVar(value="")
             self.e_key_words_ = tk.StringVar("")
             self.but_6_submit_ = ttk.Button(self.add_video_pop_up_, text="Submit", command= lambda: self.but_6_submit_clicked("add"))
         elif action == "edit":
+            print("sel val: ", self.selected_values_)
             self.add_video_pop_up_.wm_title("Edit Video")
             self.e_episode_no_ = tk.StringVar(value="{}".format(self.selected_values_[1])) ###
             self.e_title_ = tk.StringVar(value=self.selected_values_[2])
@@ -135,7 +139,7 @@ class View:
                 pub_date = pub_date.strftime("%d.%m.%Y")
             except:
                 pub_date = None
-                #pop window telling about wrong data format
+                messagebox.showwarning(title="Date format error", message="Wrong date format entered (proper format dd.mm.yyyy)")
         notes = self.e_notes_.get()
         key_words = self.e_key_words_.get()
         key_words_list = list(set(key_words.split(", ")))
@@ -144,6 +148,7 @@ class View:
     
     def but_6_submit_clicked(self, action):
         data_tuple = self.but_6_submit_data_tuple()
+        data_tuple[1] = data_tuple[1].lstrip("0")
         if action == "add":
             date_converted = datetime.datetime.strptime(data_tuple[3], "%d.%m.%Y").strftime("%Y-%m-%d")
             pub.sendMessage("but_6_submit_add_clicked", data = (Video(data_tuple[0],data_tuple[1], data_tuple[2], date_converted, data_tuple[4]), data_tuple[5]))
@@ -226,6 +231,7 @@ class View:
             kws = a[-1]
             a.pop()
             a.insert(3, kws)
+            a[1] = "{:03d}".format(a[1])
             self.video_tv_.insert(parent='', index = i, values=a, tags=(status_tag,))
         
 
@@ -280,6 +286,8 @@ class View:
         self.but_9_delete_["state"] = tk.NORMAL
         current_record = self.video_tv_.focus()
         self.selected_values_ = self.video_tv_.item(current_record, 'values')
+        dt = self.selected_values_
+        self.selected_values_ = (dt[0], dt[1], dt[2], dt[4], dt[5], dt[6], dt[3]) 
 
     def all_keywords_for_vid_ready(self, data):
         self.keywords_array_for_vid_ = data
