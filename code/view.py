@@ -148,7 +148,9 @@ class View:
     
     def but_6_submit_clicked(self, action):
         data_tuple = self.but_6_submit_data_tuple()
-        data_tuple[1] = data_tuple[1].lstrip("0")
+        data_list = list(data_tuple)
+        data_list[1] = data_list[1].lstrip("0")
+        data_tuple = tuple(data_list)
         if action == "add":
             date_converted = datetime.datetime.strptime(data_tuple[3], "%d.%m.%Y").strftime("%Y-%m-%d")
             pub.sendMessage("but_6_submit_add_clicked", data = (Video(data_tuple[0],data_tuple[1], data_tuple[2], date_converted, data_tuple[4]), data_tuple[5]))
