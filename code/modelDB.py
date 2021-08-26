@@ -1,7 +1,6 @@
 import datetime
 import sqlite3
 from pubsub import pub
-from tkinter import messagebox
 
 from key_word import KeyWord
 from model import Model
@@ -23,7 +22,7 @@ KWID_FOR_KW_NAME = """SELECT kw.keyword_id
 
 class ModelDB(Model):
     def __init__(self):
-        self.conn_ = sqlite3.connect("database/app_db5.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        self.conn_ = sqlite3.connect("database/app_db6.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
         self.c_ = self.conn_.cursor()
         self.c_.execute(Video.create_table_)
         self.c_.execute(KeyWord.create_table_)
@@ -91,7 +90,7 @@ class ModelDB(Model):
         return videos_with_keywords
 
     def sorting_type_error_pop_up(self):
-        messagebox.showwarning(title="Sorting error", message="Values of diffrent type cannot be sorted")
+        pub.sendMessage("sorting_type_error_pop_up", data = None)
 
     def get_videos_information(self, sorting_option = "Video ID"):
         pub.sendMessage("videos_information_ready", data = self.videos_data_array(sorting_option))
@@ -235,6 +234,12 @@ class ModelDB(Model):
     def get_all_keywords_for_vid(self, vid):
         all_keywords_for_vid = self.all_objects_query(vid, ALL_KEYWORDS_FOR_VID)
         pub.sendMessage("all_keywords_for_vid_ready", data=all_keywords_for_vid)
+
+    def change_db(self, data):
+        self.conn_.close()
+        self.conn_ = sqlite3.connect(data, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        self.c_ = self.conn_.cursor()
+    
    
     def __del__(self):
         self.conn_.close()

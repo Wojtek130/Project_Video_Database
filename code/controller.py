@@ -19,6 +19,8 @@ class Controller:
         pub.subscribe(self.delete_requested, "delete_requested")
         pub.subscribe(self.get_all_keywords_for_vid, "get_all_keywords_for_vid")
         pub.subscribe(self.all_keywords_for_vid_ready, "all_keywords_for_vid_ready")
+        pub.subscribe(self.change_db, "but_0_choose_db_clicked")
+        pub.subscribe(self.sorting_type_error_pop_up, "sorting_type_error_pop_up")
 
     def get_videos_information(self, data):
         self.model_.get_videos_information(data)
@@ -44,8 +46,14 @@ class Controller:
     def get_all_keywords_for_vid(self, vid):
         self.model_.get_all_keywords_for_vid(vid)
 
+    def sorting_type_error_pop_up(self, data):
+        self.view_.sorting_type_error_pop_up()
+
     def all_keywords_for_vid_ready(self, data):
         self.view_.all_keywords_for_vid_ready(data)
+
+    def change_db(self, data):
+        self.model_.change_db(data)
 
 if __name__ == "__main__":
     main_window = Tk()

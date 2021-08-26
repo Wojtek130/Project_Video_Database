@@ -3,7 +3,7 @@ from pubsub import pub
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 
 from video import Video
 
@@ -19,6 +19,12 @@ class View:
     def set_up(self):
         self.create_widgets()
         self.set_up_layout()
+
+    def but_0_choose_db_clicked(self):
+        print("choose DB")
+        db_file_path = filedialog.askopenfilename(initialdir="./database", title="select a database", filetypes=(("db files", "*.db"), ("all files", "*.*")))
+        pub.sendMessage("but_0_choose_db_clicked", data = db_file_path)
+        print(db_file_path)
 
     def but_1_show_videos_clicked(self):
         try:
@@ -249,6 +255,7 @@ class View:
         self.top_frame_.pack(side=TOP, fill=tk.X)
         self.bottom_frame_.pack(side=TOP, fill="both", expand=True)
         self.top_frame_2_.pack(side = TOP, fill=tk.X)
+        self.but_0_choose_db_.pack( side=LEFT, expand=True)
         self.but_3_add_video_.pack( side=LEFT, expand=True)
         self.but_1_show_videos_.pack( side=LEFT, expand=True)
         self.but_2_show_keywords_.pack( side=LEFT, expand=True)
@@ -258,7 +265,8 @@ class View:
         self.background_label_ = tk.Label(self.main_window_)
         self.top_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="yellow",highlightcolor="yellow",highlightthickness=1)
         self.bottom_frame_ = Frame(self.main_window_,borderwidth=2,highlightbackground="green",highlightcolor="green",highlightthickness=1)
-        self.top_frame_2_ = Frame(self.top_frame_, highlightbackground="blue", highlightthickness=1, highlightcolor="blue")        
+        self.top_frame_2_ = Frame(self.top_frame_, highlightbackground="blue", highlightthickness=1, highlightcolor="blue")
+        self.but_0_choose_db_ = tk.Button(self.top_frame_2_, text = "DB",command = self.but_0_choose_db_clicked)        
         self.but_1_show_videos_ = tk.Button(self.top_frame_2_, text = "Videos Table",command = self.but_1_show_videos_clicked)
         self.but_2_show_keywords_ = tk.Button(self.top_frame_2_, text = "Keywords Table",command = self.but_2_show_keywords_clicked)
         self.but_3_add_video_ = tk.Button(self.top_frame_2_, text = "Add Video",command = self.but_3_add_video_clicked)
@@ -285,6 +293,9 @@ class View:
 
     def all_keywords_for_vid_ready(self, data):
         self.keywords_array_for_vid_ = data
+
+    def sorting_type_error_pop_up():
+        messagebox.showwarning(title="Sorting error", message="Values of diffrent type cannot be sorted")
 
     def fixed_map(self, option):
         return [elm for elm in self.style_.map('Treeview', query_opt=option) if
