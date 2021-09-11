@@ -22,7 +22,7 @@ KWID_FOR_KW_NAME = """SELECT kw.keyword_id
 
 class ModelDB(Model):
     def __init__(self):
-        self.conn_ = sqlite3.connect("database/app_db6.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        self.conn_ = sqlite3.connect("database/app_db_demonstracja.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
         self.c_ = self.conn_.cursor()
         self.c_.execute(Video.create_table_)
         self.c_.execute(KeyWord.create_table_)
@@ -178,7 +178,10 @@ class ModelDB(Model):
     def edit_requested(self, data):
         original_data_tuple = data[0]
         edited_date_tuple = data[1]
-        dash_separated_date =  datetime.datetime.strptime(edited_date_tuple[4], "%d.%m.%Y").strftime("%Y-%m-%d")
+        if edited_date_tuple[4] is not None:
+            dash_separated_date =  datetime.datetime.strptime(edited_date_tuple[4], "%d.%m.%Y").strftime("%Y-%m-%d")
+        else:
+            dash_separated_date = None
         ('video_id', 'episode_number', 'title', 'status', 'publication_date', 'notes')
         update_query = ''' UPDATE Video
               SET episode_number = ? ,

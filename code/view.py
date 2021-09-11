@@ -157,7 +157,11 @@ class View:
         data_list[1] = data_list[1].lstrip("0")
         data_tuple = tuple(data_list)
         if action == "add":
-            date_converted = datetime.datetime.strptime(data_tuple[3], "%d.%m.%Y").strftime("%Y-%m-%d")
+            print('date add', data_tuple[3])
+            if data_tuple[3] is not None:
+                date_converted = datetime.datetime.strptime(data_tuple[3], "%d.%m.%Y").strftime("%Y-%m-%d")
+            else:
+                date_converted = None
             pub.sendMessage("but_6_submit_add_clicked", data = (Video(data_tuple[0],data_tuple[1], data_tuple[2], date_converted, data_tuple[4]), data_tuple[5]))
         elif action == "edit":
             temp2 = list(self.selected_values_)
@@ -167,7 +171,11 @@ class View:
             temp = list(data_tuple)
             temp.insert(0, original_video_tuple[0])
             data_tuple = tuple(temp)
-            date_converted = datetime.datetime.strptime(original_video_tuple[4], "%Y-%m-%d").strftime("%d.%m.%Y")
+            print('date edit', original_video_tuple[4])
+            if original_video_tuple[4] is not None:
+                date_converted = datetime.datetime.strptime(original_video_tuple[4], "%Y-%m-%d").strftime("%d.%m.%Y")
+            else:
+                date_converted = None
             original_video_tuple = (original_video_tuple[0], original_video_tuple[1], original_video_tuple[2], original_video_tuple[3], date_converted, original_video_tuple[5], original_video_tuple[6])
             pub.sendMessage("but_6_submit_edit_clicked", data = (original_video_tuple, data_tuple))
         self.add_video_pop_up_.destroy()
@@ -294,7 +302,7 @@ class View:
     def all_keywords_for_vid_ready(self, data):
         self.keywords_array_for_vid_ = data
 
-    def sorting_type_error_pop_up():
+    def sorting_type_error_pop_up(self):
         messagebox.showwarning(title="Sorting error", message="Values of diffrent type cannot be sorted")
 
     def fixed_map(self, option):
